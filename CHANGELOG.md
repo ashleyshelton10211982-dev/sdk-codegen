@@ -1,5 +1,15 @@
 # Changelog
 
+## [26.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.10.0...sdk-codegen-all-v26.12.0) (2026-08-10)
+
+
+### Features
+
+* fix for python deserializer for new fields ([4979db5](https://github.com/looker-open-source/sdk-codegen/commit/4979db5b7272fbc8d1c3d09c860c4ae101aadd69))
+* generate SDKs for Looker 26.12 ([#1734](https://github.com/looker-open-source/sdk-codegen/issues/1734)) ([854bb4f](https://github.com/looker-open-source/sdk-codegen/commit/854bb4f16096758cae4a1616f96f46ec2fbb4140))
+* python conversational analytics timestamp ([#1733](https://github.com/looker-open-source/sdk-codegen/issues/1733)) ([ad54373](https://github.com/looker-open-source/sdk-codegen/commit/ad5437350cf2dc00ccaa350e01468f2abaead349))
+* **python:** add conversational analytics chat support and fix datetime parsing ([ac92db1](https://github.com/looker-open-source/sdk-codegen/commit/ac92db16f64dee8080002b30713e6bd2c4ed83a6))
+
 ## [26.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.8.0...sdk-codegen-all-v26.10.0) (2026-06-08)
 
 
