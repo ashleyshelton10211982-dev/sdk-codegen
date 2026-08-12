@@ -25,7 +25,7 @@
  */
 
 /**
- * 518 API methods
+ * 514 API methods
  */
 
 import type {
@@ -42,6 +42,7 @@ import type {
 import type {
   IAccessToken,
   IAgent,
+  IAgentLookml,
   IAlert,
   IAlertNotifications,
   IAlertPatch,
@@ -72,8 +73,6 @@ import type {
   IConversationalAnalyticsChatRequest,
   IConversationMessage,
   ICostEstimate,
-  ICreateCIRunRequest,
-  ICreateCIRunResponse,
   ICreateContinuousIntegrationRunRequest,
   ICreateCostEstimate,
   ICreateCredentialsApi3,
@@ -127,7 +126,6 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
-  IGitDiagnosticReport,
   IGoldenQuery,
   IGroup,
   IGroupHierarchy,
@@ -169,7 +167,6 @@ import type {
   IPermissionSet,
   IProject,
   IProjectFile,
-  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -323,7 +320,6 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
-  IWriteGitDiagnosticReport,
   IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
@@ -3691,6 +3687,22 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IAgent, IError | IValidationError>>;
 
   /**
+   * ### Get LookML of a UDD Agent
+   *
+   * Returns the LookML representation of a user-defined (UDD) agent.
+   *
+   * GET /agents/lookml/{agent_id} -> IAgentLookml
+   *
+   * @param agent_id Id of agent
+   * @param options one-time API call overrides
+   *
+   */
+  agent_lookml(
+    agent_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAgentLookml, IError>>;
+
+  /**
    * ### Get All Conversation Messages
    *
    * Get all conversation messages.
@@ -4214,6 +4226,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
+   *
+   * **Note:** When searching and sorting by `title`, the search uses the `dashboard_name` defined in the LookML code, rather than the user-facing display title.
    *
    * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
    *
@@ -6157,50 +6171,6 @@ export interface ILooker40SDK extends IAPIMethods {
   //#region Project: Manage Projects
 
   /**
-   * ### Fetches a CI Run.
-   *
-   * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
-   *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
-   *
-   * @deprecated
-   *
-   * @param project_id Project Id
-   * @param run_id Run Id
-   * @param fields Requested fields
-   * @param options one-time API call overrides
-   *
-   */
-  get_ci_run(
-    project_id: string,
-    run_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IProjectRun, IError>>;
-
-  /**
-   * ### Creates a CI Run.
-   *
-   * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
-   *
-   * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
-   *
-   * @deprecated
-   *
-   * @param project_id Project Id
-   * @param body Partial<ICreateCIRunRequest>
-   * @param fields Requested fields
-   * @param options one-time API call overrides
-   *
-   */
-  create_ci_run(
-    project_id: string,
-    body: Partial<ICreateCIRunRequest>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICreateCIRunResponse, IError | IValidationError>>;
-
-  /**
    * ### Creates and queues a Continuous Integration Run.
    *
    * POST /projects/{project_id}/continuous_integration/runs -> ICIRun
@@ -6837,56 +6807,6 @@ export interface ILooker40SDK extends IAPIMethods {
     request: IRequestTagRef,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IProject, IError | IValidationError>>;
-
-  /**
-   * ### Initiate Git Diagnosis Suite
-   *
-   * POST /projects/{project_id}/git_diagnostic_report -> IGitDiagnosticReport
-   *
-   * @param project_id Looker Project ID
-   * @param body Partial<IWriteGitDiagnosticReport>
-   * @param options one-time API call overrides
-   *
-   */
-  create_git_diagnostic_report(
-    project_id: string,
-    body: Partial<IWriteGitDiagnosticReport>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>>;
-
-  /**
-   * ### Retrieve Live Git Diagnostic Suite Execution Status
-   *
-   * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> IGitDiagnosticReport
-   *
-   * @param project_id Looker Project ID
-   * @param report_id Report ID
-   * @param options one-time API call overrides
-   *
-   */
-  get_git_diagnostic_report(
-    project_id: string,
-    report_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IGitDiagnosticReport, IError>>;
-
-  /**
-   * ### Repair Git Configuration Issues
-   *
-   * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> IGitDiagnosticReport
-   *
-   * @param project_id Looker Project ID
-   * @param report_id Report ID
-   * @param body Partial<IWriteGitDiagnosticReport>
-   * @param options one-time API call overrides
-   *
-   */
-  repair_git_diagnostic_report(
-    project_id: string,
-    report_id: string,
-    body: Partial<IWriteGitDiagnosticReport>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>>;
 
   /**
    * ### Configure Repository Credential for a remote dependency
@@ -7715,7 +7635,7 @@ export interface ILooker40SDK extends IAPIMethods {
   delete_model_set(
     model_set_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
 
   /**
    * ### Get information about all model sets.
@@ -7837,7 +7757,7 @@ export interface ILooker40SDK extends IAPIMethods {
   delete_permission_set(
     permission_set_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
 
   /**
    * ### Get information about all permission sets.
@@ -9037,6 +8957,128 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>>;
 
   /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_email(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param body Partial<IWriteCredentialsEmail>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  create_user_credentials_email(
+    user_id: string,
+    body: Partial<IWriteCredentialsEmail>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param body Partial<IWriteCredentialsEmail>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  update_user_credentials_email(
+    user_id: string,
+    body: Partial<IWriteCredentialsEmail>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * DELETE /users/{user_id}/credentials_email -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_email(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Create a password reset token.
+   * This will create a cryptographically secure random password reset token for the user.
+   * If the user already has a password reset token then this invalidates the old token and creates a new one.
+   * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
+   * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
+   * Tokens that expire are typically used for self-service password resets for existing users.
+   * Invitation emails for new users typically are not set to expire.
+   * The expire period is always 60 minutes when expires is enabled.
+   * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
+   *
+   * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  create_user_credentials_email_password_reset(
+    request: IRequestCreateUserCredentialsEmailPasswordReset,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Send a password reset token.
+   * This will send a password reset email to the user. If a password reset token does not already exist
+   * for this user, it will create one and then send it.
+   * If the user has not yet set up their account, it will send a setup email to the user.
+   * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
+   * Password reset URLs will expire in 60 minutes.
+   * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  send_user_credentials_email_password_reset(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
    *
    * GET /user -> IUser
@@ -9295,80 +9337,6 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_service_account(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * GET /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_email(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param body Partial<IWriteCredentialsEmail>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  create_user_credentials_email(
-    user_id: string,
-    body: Partial<IWriteCredentialsEmail>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param body Partial<IWriteCredentialsEmail>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  update_user_credentials_email(
-    user_id: string,
-    body: Partial<IWriteCredentialsEmail>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * DELETE /users/{user_id}/credentials_email -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_email(
     user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>;
@@ -9778,30 +9746,6 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<ISession[], IError>>;
 
   /**
-   * ### Create a password reset token.
-   * This will create a cryptographically secure random password reset token for the user.
-   * If the user already has a password reset token then this invalidates the old token and creates a new one.
-   * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
-   * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
-   * Tokens that expire are typically used for self-service password resets for existing users.
-   * Invitation emails for new users typically are not set to expire.
-   * The expire period is always 60 minutes when expires is enabled.
-   * This method can be called with an empty body.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
-   *
-   * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  create_user_credentials_email_password_reset(
-    request: IRequestCreateUserCredentialsEmailPasswordReset,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
-
-  /**
    * ### Get information about roles of a given user
    *
    * GET /users/{user_id}/roles -> IRole[]
@@ -9902,30 +9846,6 @@ export interface ILooker40SDK extends IAPIMethods {
     user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>;
-
-  /**
-   * ### Send a password reset token.
-   * This will send a password reset email to the user. If a password reset token does not already exist
-   * for this user, it will create one and then send it.
-   * If the user has not yet set up their account, it will send a setup email to the user.
-   * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
-   * Password reset URLs will expire in 60 minutes.
-   * This method can be called with an empty body.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  send_user_credentials_email_password_reset(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
 
   /**
    * ### Change a disabled user's email addresses

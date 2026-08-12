@@ -25,7 +25,7 @@
  */
 
 /**
- * 518 API methods
+ * 514 API methods
  */
 
 import type {
@@ -44,6 +44,7 @@ import { sdkVersion } from '../constants';
 import type {
   IAccessToken,
   IAgent,
+  IAgentLookml,
   IAlert,
   IAlertNotifications,
   IAlertPatch,
@@ -74,8 +75,6 @@ import type {
   IConversationalAnalyticsChatRequest,
   IConversationMessage,
   ICostEstimate,
-  ICreateCIRunRequest,
-  ICreateCIRunResponse,
   ICreateContinuousIntegrationRunRequest,
   ICreateCostEstimate,
   ICreateCredentialsApi3,
@@ -128,7 +127,6 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
-  IGitDiagnosticReport,
   IGoldenQuery,
   IGroup,
   IGroupHierarchy,
@@ -170,7 +168,6 @@ import type {
   IPermissionSet,
   IProject,
   IProjectFile,
-  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -324,7 +321,6 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
-  IWriteGitDiagnosticReport,
   IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
@@ -5810,6 +5806,34 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Get LookML of a UDD Agent
+   *
+   * Returns the LookML representation of a user-defined (UDD) agent.
+   *
+   * GET /agents/lookml/{agent_id} -> IAgentLookml
+   *
+   * @param callback streaming output function
+   * @param agent_id Id of agent
+   * @param options one-time API call overrides
+   *
+   */
+  async agent_lookml(
+    callback: (response: Response) => Promise<IAgentLookml>,
+    agent_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    agent_id = encodeParam(agent_id);
+    return this.authStream<IAgentLookml>(
+      callback,
+      'GET',
+      `/agents/lookml/${agent_id}`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Get All Conversation Messages
    *
    * Get all conversation messages.
@@ -6634,6 +6658,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
+   *
+   * **Note:** When searching and sorting by `title`, the search uses the `dashboard_name` defined in the LookML code, rather than the user-facing display title.
    *
    * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
    *
@@ -9983,75 +10009,6 @@ export class Looker40SDKStream extends APIMethods {
   //#region Project: Manage Projects
 
   /**
-   * ### Fetches a CI Run.
-   *
-   * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
-   *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
-   *
-   * @deprecated
-   *
-   * @param callback streaming output function
-   * @param project_id Project Id
-   * @param run_id Run Id
-   * @param fields Requested fields
-   * @param options one-time API call overrides
-   *
-   */
-  async get_ci_run(
-    callback: (response: Response) => Promise<IProjectRun>,
-    project_id: string,
-    run_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    run_id = encodeParam(run_id);
-    return this.authStream<IProjectRun>(
-      callback,
-      'GET',
-      `/projects/${project_id}/ci/runs/${run_id}`,
-      { fields },
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### Creates a CI Run.
-   *
-   * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
-   *
-   * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
-   *
-   * @deprecated
-   *
-   * @param callback streaming output function
-   * @param project_id Project Id
-   * @param body Partial<ICreateCIRunRequest>
-   * @param fields Requested fields
-   * @param options one-time API call overrides
-   *
-   */
-  async create_ci_run(
-    callback: (response: Response) => Promise<ICreateCIRunResponse>,
-    project_id: string,
-    body: Partial<ICreateCIRunRequest>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    return this.authStream<ICreateCIRunResponse>(
-      callback,
-      'POST',
-      `/projects/${project_id}/ci/run`,
-      { fields },
-      body,
-      options
-    );
-  }
-
-  /**
    * ### Creates and queues a Continuous Integration Run.
    *
    * POST /projects/{project_id}/continuous_integration/runs -> ICIRun
@@ -11078,94 +11035,6 @@ export class Looker40SDKStream extends APIMethods {
         tag_message: request.tag_message,
       },
       request.body,
-      options
-    );
-  }
-
-  /**
-   * ### Initiate Git Diagnosis Suite
-   *
-   * POST /projects/{project_id}/git_diagnostic_report -> IGitDiagnosticReport
-   *
-   * @param callback streaming output function
-   * @param project_id Looker Project ID
-   * @param body Partial<IWriteGitDiagnosticReport>
-   * @param options one-time API call overrides
-   *
-   */
-  async create_git_diagnostic_report(
-    callback: (response: Response) => Promise<IGitDiagnosticReport>,
-    project_id: string,
-    body: Partial<IWriteGitDiagnosticReport>,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    return this.authStream<IGitDiagnosticReport>(
-      callback,
-      'POST',
-      `/projects/${project_id}/git_diagnostic_report`,
-      null,
-      body,
-      options
-    );
-  }
-
-  /**
-   * ### Retrieve Live Git Diagnostic Suite Execution Status
-   *
-   * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> IGitDiagnosticReport
-   *
-   * @param callback streaming output function
-   * @param project_id Looker Project ID
-   * @param report_id Report ID
-   * @param options one-time API call overrides
-   *
-   */
-  async get_git_diagnostic_report(
-    callback: (response: Response) => Promise<IGitDiagnosticReport>,
-    project_id: string,
-    report_id: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    report_id = encodeParam(report_id);
-    return this.authStream<IGitDiagnosticReport>(
-      callback,
-      'GET',
-      `/projects/${project_id}/git_diagnostic_report/${report_id}`,
-      null,
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### Repair Git Configuration Issues
-   *
-   * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> IGitDiagnosticReport
-   *
-   * @param callback streaming output function
-   * @param project_id Looker Project ID
-   * @param report_id Report ID
-   * @param body Partial<IWriteGitDiagnosticReport>
-   * @param options one-time API call overrides
-   *
-   */
-  async repair_git_diagnostic_report(
-    callback: (response: Response) => Promise<IGitDiagnosticReport>,
-    project_id: string,
-    report_id: string,
-    body: Partial<IWriteGitDiagnosticReport>,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    report_id = encodeParam(report_id);
-    return this.authStream<IGitDiagnosticReport>(
-      callback,
-      'POST',
-      `/projects/${project_id}/git_diagnostic_report/${report_id}/repair`,
-      null,
-      body,
       options
     );
   }
@@ -14474,6 +14343,200 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async user_credentials_email(
+    callback: (response: Response) => Promise<ICredentialsEmail>,
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<ICredentialsEmail>(
+      callback,
+      'GET',
+      `/users/${user_id}/credentials_email`,
+      { fields },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param body Partial<IWriteCredentialsEmail>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async create_user_credentials_email(
+    callback: (response: Response) => Promise<ICredentialsEmail>,
+    user_id: string,
+    body: Partial<IWriteCredentialsEmail>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<ICredentialsEmail>(
+      callback,
+      'POST',
+      `/users/${user_id}/credentials_email`,
+      { fields },
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param body Partial<IWriteCredentialsEmail>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async update_user_credentials_email(
+    callback: (response: Response) => Promise<ICredentialsEmail>,
+    user_id: string,
+    body: Partial<IWriteCredentialsEmail>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<ICredentialsEmail>(
+      callback,
+      'PATCH',
+      `/users/${user_id}/credentials_email`,
+      { fields },
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * DELETE /users/{user_id}/credentials_email -> string
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_user_credentials_email(
+    callback: (response: Response) => Promise<string>,
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<string>(
+      callback,
+      'DELETE',
+      `/users/${user_id}/credentials_email`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Create a password reset token.
+   * This will create a cryptographically secure random password reset token for the user.
+   * If the user already has a password reset token then this invalidates the old token and creates a new one.
+   * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
+   * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
+   * Tokens that expire are typically used for self-service password resets for existing users.
+   * Invitation emails for new users typically are not set to expire.
+   * The expire period is always 60 minutes when expires is enabled.
+   * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async create_user_credentials_email_password_reset(
+    callback: (response: Response) => Promise<ICredentialsEmail>,
+    request: IRequestCreateUserCredentialsEmailPasswordReset,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.user_id = encodeParam(request.user_id);
+    return this.authStream<ICredentialsEmail>(
+      callback,
+      'POST',
+      `/users/${request.user_id}/credentials_email/password_reset`,
+      { expires: request.expires, fields: request.fields },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Send a password reset token.
+   * This will send a password reset email to the user. If a password reset token does not already exist
+   * for this user, it will create one and then send it.
+   * If the user has not yet set up their account, it will send a setup email to the user.
+   * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
+   * Password reset URLs will expire in 60 minutes.
+   * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async send_user_credentials_email_password_reset(
+    callback: (response: Response) => Promise<ICredentialsEmail>,
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<ICredentialsEmail>(
+      callback,
+      'POST',
+      `/users/${user_id}/credentials_email/send_password_reset`,
+      { fields },
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
    *
    * GET /user -> IUser
@@ -14900,128 +14963,6 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'DELETE',
       `/users/service_accounts/${user_id}`,
-      null,
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * GET /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  async user_credentials_email(
-    callback: (response: Response) => Promise<ICredentialsEmail>,
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<ICredentialsEmail>(
-      callback,
-      'GET',
-      `/users/${user_id}/credentials_email`,
-      { fields },
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param body Partial<IWriteCredentialsEmail>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  async create_user_credentials_email(
-    callback: (response: Response) => Promise<ICredentialsEmail>,
-    user_id: string,
-    body: Partial<IWriteCredentialsEmail>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<ICredentialsEmail>(
-      callback,
-      'POST',
-      `/users/${user_id}/credentials_email`,
-      { fields },
-      body,
-      options
-    );
-  }
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param body Partial<IWriteCredentialsEmail>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  async update_user_credentials_email(
-    callback: (response: Response) => Promise<ICredentialsEmail>,
-    user_id: string,
-    body: Partial<IWriteCredentialsEmail>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<ICredentialsEmail>(
-      callback,
-      'PATCH',
-      `/users/${user_id}/credentials_email`,
-      { fields },
-      body,
-      options
-    );
-  }
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * DELETE /users/{user_id}/credentials_email -> string
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  async delete_user_credentials_email(
-    callback: (response: Response) => Promise<string>,
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<string>(
-      callback,
-      'DELETE',
-      `/users/${user_id}/credentials_email`,
       null,
       null,
       options
@@ -15728,42 +15669,6 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
-   * ### Create a password reset token.
-   * This will create a cryptographically secure random password reset token for the user.
-   * If the user already has a password reset token then this invalidates the old token and creates a new one.
-   * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
-   * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
-   * Tokens that expire are typically used for self-service password resets for existing users.
-   * Invitation emails for new users typically are not set to expire.
-   * The expire period is always 60 minutes when expires is enabled.
-   * This method can be called with an empty body.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
-   *
-   * @param callback streaming output function
-   * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  async create_user_credentials_email_password_reset(
-    callback: (response: Response) => Promise<ICredentialsEmail>,
-    request: IRequestCreateUserCredentialsEmailPasswordReset,
-    options?: Partial<ITransportSettings>
-  ) {
-    request.user_id = encodeParam(request.user_id);
-    return this.authStream<ICredentialsEmail>(
-      callback,
-      'POST',
-      `/users/${request.user_id}/credentials_email/password_reset`,
-      { expires: request.expires, fields: request.fields },
-      null,
-      options
-    );
-  }
-
-  /**
    * ### Get information about roles of a given user
    *
    * GET /users/{user_id}/roles -> IRole[]
@@ -15930,42 +15835,6 @@ export class Looker40SDKStream extends APIMethods {
       'DELETE',
       `/users/${user_id}/attribute_values/${user_attribute_id}`,
       null,
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### Send a password reset token.
-   * This will send a password reset email to the user. If a password reset token does not already exist
-   * for this user, it will create one and then send it.
-   * If the user has not yet set up their account, it will send a setup email to the user.
-   * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
-   * Password reset URLs will expire in 60 minutes.
-   * This method can be called with an empty body.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  async send_user_credentials_email_password_reset(
-    callback: (response: Response) => Promise<ICredentialsEmail>,
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<ICredentialsEmail>(
-      callback,
-      'POST',
-      `/users/${user_id}/credentials_email/send_password_reset`,
-      { fields },
       null,
       options
     );

@@ -25,7 +25,7 @@
  */
 
 /**
- * 537 API models: 363 Spec, 76 Request, 72 Write, 26 Enum
+ * 510 API models: 337 Spec, 76 Request, 71 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -136,6 +136,17 @@ export interface IAgent {
    */
   studio_agent_id?: string | null;
   workflow_params?: IWorkflowParams;
+}
+
+export interface IAgentLookml {
+  /**
+   * Id of Agent (read-only)
+   */
+  agent_id?: string | null;
+  /**
+   * lookml of UDD Agent (read-only)
+   */
+  lookml?: string | null;
 }
 
 export interface IAlert {
@@ -581,95 +592,6 @@ export interface IArtifactUsage {
    * The currently used storage size in bytes of the entire artifact store. (read-only)
    */
   usage: number;
-}
-
-export interface IAssertValidatorErrorItem {
-  assert_error?: IAssertValidatorTestError;
-  generic_error?: IGenericError;
-}
-
-export interface IAssertValidatorResult {
-  /**
-   * Name of the validator (assert) (read-only)
-   */
-  name?: string;
-  /**
-   * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Results of the validation (read-only)
-   */
-  results?: IAssertValidatorTestedExplore[];
-}
-
-export interface IAssertValidatorTestedExplore {
-  /**
-   * Total number of failed data tests (read-only)
-   */
-  error_count?: number | null;
-  /**
-   * Details of data tests that failed validation (read-only)
-   */
-  errors?: IAssertValidatorErrorItem[];
-  /**
-   * Total number of successful data tests (read-only)
-   */
-  success_count?: string;
-  /**
-   * Details of data tests that passed validation (read-only)
-   */
-  successes?: IAssertValidatorTestSuccess[];
-}
-
-export interface IAssertValidatorTestError {
-  /**
-   * LookML model that contains the data test (read-only)
-   */
-  model?: string;
-  /**
-   * LookML Explore that is used as the explore_source for the data test (read-only)
-   */
-  explore?: string;
-  /**
-   * Name of the data test (read-only)
-   */
-  test_name?: string;
-  /**
-   * URL to the Explore (read-only)
-   */
-  explore_url?: string;
-  /**
-   * URL to the LookML file where the data test is defined (read-only)
-   */
-  lookml_url?: string;
-  /**
-   * Message returned by the data test (read-only)
-   */
-  message?: string;
-}
-
-export interface IAssertValidatorTestSuccess {
-  /**
-   * LookML model that contains the data test (read-only)
-   */
-  model?: string;
-  /**
-   * LookML Explore that is used as the explore_source for the data test (read-only)
-   */
-  explore?: string;
-  /**
-   * Name of the data test (read-only)
-   */
-  test_name?: string;
-  /**
-   * URL to the Explore (read-only)
-   */
-  explore_url?: string;
-  /**
-   * URL to the LookML file where the data test is defined (read-only)
-   */
-  lookml_url?: string;
 }
 
 export interface IAsyncDeployResponse {
@@ -1146,25 +1068,6 @@ export interface ICIAssertValidatorTestSuccess {
   lookml_url?: string;
 }
 
-export interface ICIChangeRequest {
-  /**
-   * Numeric identifier of the change request (read-only)
-   */
-  change_request_number?: number;
-  /**
-   * URL of the change request (read-only)
-   */
-  change_request_url?: string;
-  /**
-   * Name of the change request (read-only)
-   */
-  change_request_name?: string;
-  /**
-   * For PR-triggered CI runs, the URL to the change request commit that triggered the run. (read-only)
-   */
-  change_request_commits_url?: string;
-}
-
 export interface ICIContentValidatorContentError {
   /**
    * A URI reference that identifies the problem type
@@ -1296,25 +1199,6 @@ export interface ICIGenericError {
    * URI reference that identifies the specific occurrence of the problem
    */
   instance?: string | null;
-}
-
-export interface ICIGitState {
-  /**
-   * Git branch that the CI run validates (read-only)
-   */
-  branch?: string | null;
-  /**
-   * Git repository that contains the Git branch being validated (read-only)
-   */
-  repository?: string | null;
-  /**
-   * Git commit that the CI run validates (read-only)
-   */
-  commit_ref?: string | null;
-  /**
-   * For incremental runs, the Git branch that the CI run compares against during validation (read-only)
-   */
-  target?: string | null;
 }
 
 export interface ICILookMLValidatorError {
@@ -1483,6 +1367,18 @@ export interface ICIRun {
    */
   git_target_url?: string | null;
   /**
+   * Git branch name in dbt Cloud
+   */
+  dbt_cloud_git_branch_name?: string | null;
+  /**
+   * Git commit ref in dbt Cloud
+   */
+  dbt_cloud_git_commit_ref?: string | null;
+  /**
+   * Git repository name in dbt Cloud
+   */
+  dbt_cloud_git_repository_name?: string | null;
+  /**
    * Time and date that the CI run was created (read-only)
    */
   created_at?: Date;
@@ -1545,25 +1441,6 @@ export interface ICIRunUserAttribute {
    * Value of the user attribute
    */
   value?: string | null;
-}
-
-export interface ICIScheduleTrigger {
-  /**
-   * Whether the CI run schedule is active (read-only)
-   */
-  enabled?: boolean;
-  /**
-   * For scheduled runs, day of the week that the CI run is scheduled (read-only)
-   */
-  day?: string | null;
-  /**
-   * For schedules runs, the hour of the day (24 hour format) that the CI run is scheduled (read-only)
-   */
-  hour?: string | null;
-  /**
-   * For scheduled runs, how often the CI run is scheduled to run (hourly, daily, weekly) (read-only)
-   */
-  frequency?: string;
 }
 
 export interface ICISqlValidatorError {
@@ -1974,6 +1851,10 @@ export interface IContentSearch {
    * Name of the parent folder of the content (read-only)
    */
   parent_folder_name?: string | null;
+  /**
+   * Name of the parent project of the content (read-only)
+   */
+  parent_project_name?: string | null;
 }
 
 export interface IContentSummary {
@@ -2351,65 +2232,6 @@ export interface IContentValidationScheduledPlan {
   id?: string;
 }
 
-export interface IContentValidatorContentError {
-  /**
-   * A URI reference that identifies the problem type (read-only)
-   */
-  type?: string;
-  /**
-   * Overview of the error (read-only)
-   */
-  title?: string;
-  /**
-   * Detail of the error (read-only)
-   */
-  detail?: string;
-  /**
-   * The HTTP status code for the problem (read-only)
-   */
-  status?: string | null;
-  /**
-   * URI reference that identifies the specific occurrence of the problem (read-only)
-   */
-  instance?: string | null;
-  /**
-   * LookML model that contains the error (read-only)
-   */
-  model?: string | null;
-  /**
-   * LookML Explore that contains the error (read-only)
-   */
-  explore?: string | null;
-  /**
-   * LookML field that caused the error (read-only)
-   */
-  field_name?: string;
-  /**
-   * Type of the content (dashboard, look) (read-only)
-   */
-  content_type?: string;
-  /**
-   * Folder of the content (read-only)
-   */
-  folder?: string | null;
-  /**
-   * URL of the content (read-only)
-   */
-  url?: string;
-  /**
-   * Type of the tile (dashboard_element, dashboard_filter) (read-only)
-   */
-  tile_type?: string | null;
-  /**
-   * Title of the tile (read-only)
-   */
-  tile_title?: string | null;
-  /**
-   * Message returned by the content validator (read-only)
-   */
-  message?: string;
-}
-
 export interface IContentValidatorError {
   look?: IContentValidationLook;
   dashboard?: IContentValidationDashboard;
@@ -2427,41 +2249,6 @@ export interface IContentValidatorError {
    * An id unique to this piece of content for this validation run (read-only)
    */
   id?: string;
-}
-
-export interface IContentValidatorErrorItem {
-  content_error?: IContentValidatorContentError;
-  generic_error?: IGenericError;
-}
-
-export interface IContentValidatorResult {
-  /**
-   * Name of the validator (content) (read-only)
-   */
-  name?: string;
-  /**
-   * Whether the validation was incremental (read-only)
-   */
-  incremental?: boolean;
-  /**
-   * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Results of the content validation (read-only)
-   */
-  result?: IContentValidatorTestedExplore[];
-}
-
-export interface IContentValidatorTestedExplore {
-  /**
-   * Total number of failed content validations (read-only)
-   */
-  error_count?: number | null;
-  /**
-   * Details of the content that failed validation (read-only)
-   */
-  errors?: IContentValidatorErrorItem[];
 }
 
 export interface IContentView {
@@ -2520,6 +2307,14 @@ export interface IContext {
    * Agent instructions
    */
   instructions?: string;
+  /**
+   * Show analytical details in preview
+   */
+  show_analytical_details?: boolean | null;
+  /**
+   * Show debug info in preview
+   */
+  show_debug?: boolean | null;
 }
 
 export interface IContinuousPalette {
@@ -2648,32 +2443,6 @@ export interface ICostEstimate {
    * Human-friendly message (read-only)
    */
   message?: string;
-}
-
-export interface ICreateCIRunRequest {
-  /**
-   * ID of the CI suite
-   */
-  suite_id?: string;
-  /**
-   * Branch that the CI run should validate. Omit to test production.
-   */
-  branch?: string | null;
-  /**
-   * Commit that the CI run should validate. Omit to test production.
-   */
-  commit?: string | null;
-}
-
-export interface ICreateCIRunResponse {
-  /**
-   * ID of the CI run (read-only)
-   */
-  run_id?: string;
-  /**
-   * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
 }
 
 export interface ICreateContinuousIntegrationRunRequest {
@@ -3553,6 +3322,10 @@ export interface IDashboard {
    */
   url?: string | null;
   /**
+   * The layout granularity to apply to this dashboard (ie: default or granular)
+   */
+  layout_granularity?: string | null;
+  /**
    * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
    */
   preserve_desktop_layout?: boolean;
@@ -3716,6 +3489,10 @@ export interface IDashboardElement {
    */
   dashboard_layout_id?: string | null;
   /**
+   * ID of the group to place this element under in the layout
+   */
+  group_id?: string | null;
+  /**
    * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
    */
   edit_uri?: string | null;
@@ -3819,6 +3596,10 @@ export interface IDashboardElement {
    */
   aria_description?: string | null;
   certification_metadata?: ICertification;
+  /**
+   * ID of Dashboard Image
+   */
+  image_id?: string | null;
 }
 
 export interface IDashboardFilter {
@@ -4012,6 +3793,10 @@ export interface IDashboardLayoutComponent {
    * Height (granular layout)
    */
   granular_height?: number | null;
+  /**
+   * Id of parent Dashboard Layout Component group
+   */
+  group_id?: string | null;
 }
 
 export interface IDashboardLookml {
@@ -5568,29 +5353,6 @@ export enum Format {
   vector_tile_region = 'vector_tile_region',
 }
 
-export interface IGenericError {
-  /**
-   * A URI reference that identifies the problem type (read-only)
-   */
-  type?: string;
-  /**
-   * Overview of the error (read-only)
-   */
-  title?: string;
-  /**
-   * Detail of the error (read-only)
-   */
-  detail?: string;
-  /**
-   * The HTTP status code for the problem (read-only)
-   */
-  status?: string | null;
-  /**
-   * URI reference that identifies the specific occurrence of the problem (read-only)
-   */
-  instance?: string | null;
-}
-
 export interface IGitBranch {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -5696,92 +5458,6 @@ export interface IGitConnectionTestResult {
   status?: string | null;
 }
 
-export interface IGitDiagnosticIssue {
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>;
-  /**
-   * Unique ID of the diagnostic issue. (read-only)
-   */
-  id?: string;
-  /**
-   * Parent diagnostic report ID. (read-only)
-   */
-  report_id?: string | null;
-  /**
-   * Target Looker Project ID. (read-only)
-   */
-  project_id?: string | null;
-  /**
-   * Environment scope (developer/production). (read-only)
-   */
-  project_type?: string | null;
-  /**
-   * Git diagnostic issue category. (read-only)
-   */
-  issue_type?: string | null;
-  /**
-   * Version schema. (read-only)
-   */
-  issue_version?: string | null;
-  /**
-   * Current execution status. (read-only)
-   */
-  state?: string | null;
-  /**
-   * Creation timestamp. (read-only)
-   */
-  created_at?: Date | null;
-  /**
-   * Last update timestamp. (read-only)
-   */
-  updated_at?: Date | null;
-}
-
-export interface IGitDiagnosticReport {
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>;
-  /**
-   * Unique ID of the git diagnostic report. (read-only)
-   */
-  id?: string;
-  /**
-   * Target Looker Project ID. (read-only)
-   */
-  project_id?: string | null;
-  /**
-   * ID of the user initiating the diagnosis. (read-only)
-   */
-  user_id?: string | null;
-  /**
-   * Raw lifecycle state. (read-only)
-   */
-  state?: string | null;
-  /**
-   * Status derived from state. (read-only)
-   */
-  status?: string | null;
-  /**
-   * Creation time. (read-only)
-   */
-  created_at?: Date | null;
-  /**
-   * Update time. (read-only)
-   */
-  updated_at?: Date | null;
-  /**
-   * Project structure type.
-   */
-  project_type?: string | null;
-  /**
-   * Diagnostic issues associated with this report. (read-only)
-   */
-  issues?: IGitDiagnosticIssue[] | null;
-}
-
 export interface IGitStatus {
   /**
    * Git action: add, delete, etc (read-only)
@@ -5823,7 +5499,7 @@ export interface IGoldenQuery {
    */
   answer?: string;
   /**
-   * Whether this golden question should be utilized by the agent
+   * Whether this golden question should be utilized by the agent (read-only)
    */
   is_active?: boolean;
   /**
@@ -5870,6 +5546,14 @@ export interface IGoldenQuery {
    * Client ID of the associated Looker Query (read-only)
    */
   client_id?: string | null;
+  /**
+   * Pivots of the associated Looker Query (read-only)
+   */
+  pivots?: string[] | null;
+  /**
+   * Dynamic fields of the associated Looker Query (read-only)
+   */
+  dynamic_fields?: string | null;
 }
 
 export interface IGroup {
@@ -8102,85 +7786,6 @@ export interface ILookmlTestResult {
   success?: boolean;
 }
 
-export interface ILookMLValidatorError {
-  /**
-   * A URI reference that identifies the problem type (read-only)
-   */
-  type?: string;
-  /**
-   * Overview of the error (read-only)
-   */
-  title?: string;
-  /**
-   * Detail of the error (read-only)
-   */
-  detail?: string;
-  /**
-   * The HTTP status code for the problem (read-only)
-   */
-  status?: string | null;
-  /**
-   * URI reference that identifies the specific occurrence of the problem (read-only)
-   */
-  instance?: string | null;
-  /**
-   * LookML model that contains the error (read-only)
-   */
-  model?: string | null;
-  /**
-   * LookML Explore that contains the error (read-only)
-   */
-  explore?: string | null;
-  /**
-   * LookML field that caused the error (read-only)
-   */
-  field_name?: string | null;
-  /**
-   * Message returned by the LookML validator (read-only)
-   */
-  message?: string | null;
-  /**
-   * Severity of the error (warning, error, fatal, info, success) (read-only)
-   */
-  severity?: string | null;
-  /**
-   * Line number of the error in the LookML file (read-only)
-   */
-  line_number?: string | null;
-  /**
-   * URL to the LookML that caused the error (read-only)
-   */
-  lookml_url?: string | null;
-  /**
-   * IDE folder path to the LookML file that caused the error (read-only)
-   */
-  file_path?: string | null;
-}
-
-export interface ILookMLValidatorErrorItem {
-  lookml_error?: ILookMLValidatorError;
-  generic_error?: IGenericError;
-}
-
-export interface ILookMLValidatorResult {
-  /**
-   * Name of the validator (lookml) (read-only)
-   */
-  name?: string;
-  /**
-   * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Total number of failed LookML validations (read-only)
-   */
-  error_count?: number | null;
-  /**
-   * Details of the LookML that failed validation (read-only)
-   */
-  errors?: ILookMLValidatorErrorItem[];
-}
-
 export interface ILookModel {
   /**
    * Model Id (read-only)
@@ -8522,6 +8127,7 @@ export interface IMcpTools {
   get_dashboards?: IMcpToolSetting;
   get_dimensions?: IMcpToolSetting;
   get_explores?: IMcpToolSetting;
+  get_field_value_suggestions?: IMcpToolSetting;
   get_filters?: IMcpToolSetting;
   get_looks?: IMcpToolSetting;
   get_measures?: IMcpToolSetting;
@@ -9441,10 +9047,6 @@ export interface IProjectFile {
    */
   editable?: boolean;
   git_status?: IGitStatus;
-}
-
-export interface IProjectRun {
-  run?: IRun;
 }
 
 export interface IProjectValidation {
@@ -11847,7 +11449,7 @@ export interface IRequestSearchLookmlDashboards {
    */
   folder_id?: string | null;
   /**
-   * Match LookML Dashboard title.
+   * Match LookML Dashboard title. Note: This matches on the dashboard_name defined in the LookML code, not the display title.
    */
   title?: string | null;
   /**
@@ -11867,7 +11469,7 @@ export interface IRequestSearchLookmlDashboards {
    */
   offset?: number | null;
   /**
-   * One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]
+   * One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]. Note: Sorting by title sorts by the dashboard_name defined in the LookML code, not the display title.
    */
   sorts?: string | null;
 }
@@ -12759,61 +12361,6 @@ export interface IRoleSearch {
   users_url?: string | null;
 }
 
-export interface IRun {
-  /**
-   * ID of the CI run (read-only)
-   */
-  run_id?: string;
-  /**
-   * Time and date that the CI run was initiated (read-only)
-   */
-  created_at?: Date;
-  /**
-   * Time and date that the CI run began executing (read-only)
-   */
-  started_at?: Date | null;
-  /**
-   * Time and date that the CI run completed (read-only)
-   */
-  finished_at?: Date | null;
-  /**
-   * Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
-   */
-  status_url?: string | null;
-  /**
-   * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Git service for CI run (e.g. GitHub) (read-only)
-   */
-  git_service?: string | null;
-  git_state?: ICIGitState;
-  result?: IRunResult;
-  schedule?: ICIScheduleTrigger;
-  /**
-   * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
-   */
-  target_branch?: string | null;
-  /**
-   * Name of the CI suite (read-only)
-   */
-  title?: string;
-  /**
-   * Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
-   */
-  trigger?: string;
-  change_request?: ICIChangeRequest;
-  /**
-   * ID of the CI suite (read-only)
-   */
-  suite_id?: string;
-  /**
-   * Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
-   */
-  username?: string | null;
-}
-
 export interface IRunningQueries {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -12891,18 +12438,6 @@ export interface IRunningQueries {
    * SQL text of the SQL Interface query as run (read-only)
    */
   sql_interface_sql?: string | null;
-}
-
-export interface IRunResult {
-  sql_result?: ISqlValidatorResult;
-  sql_error?: IGenericError;
-  assert_result?: IAssertValidatorResult;
-  assert_error?: IGenericError;
-  content_result?: IContentValidatorResult;
-  content_error?: IGenericError;
-  lookml_result?: ILookMLValidatorResult;
-  lookml_error?: IGenericError;
-  generic_error?: IGenericError;
 }
 
 export interface ISamlConfig {
@@ -14006,108 +13541,6 @@ export interface ISqlQueryCreate {
   vis_config?: IDictionary<any> | null;
 }
 
-export interface ISqlValidatorError {
-  /**
-   * A URI reference that identifies the problem type (read-only)
-   */
-  type?: string;
-  /**
-   * Overview of the error (read-only)
-   */
-  title?: string;
-  /**
-   * Detail of the error (read-only)
-   */
-  detail?: string;
-  /**
-   * The HTTP status code for the problem (read-only)
-   */
-  status?: string | null;
-  /**
-   * URI reference that identifies the specific occurrence of the problem (read-only)
-   */
-  instance?: string | null;
-  /**
-   * LookML model that contains the Explore that failed SQL validation (read-only)
-   */
-  model?: string;
-  /**
-   * LookML Explore that failed SQL validation (read-only)
-   */
-  explore?: string;
-  /**
-   * Message returned by the SQL validation (read-only)
-   */
-  message?: string;
-  /**
-   * URL to the Explore (read-only)
-   */
-  explore_url?: string | null;
-  /**
-   * URL to the LookML that caused the error (read-only)
-   */
-  lookml_url?: string | null;
-  /**
-   * LookML dimension that caused the error (read-only)
-   */
-  dimension?: string | null;
-  /**
-   * Line of the error in the LookML file (read-only)
-   */
-  line_number?: string | null;
-}
-
-export interface ISqlValidatorErrorItem {
-  sql_error?: ISqlValidatorError;
-  generic_error?: IGenericError;
-}
-
-export interface ISqlValidatorResult {
-  /**
-   * Name of the validator (sql) (read-only)
-   */
-  name?: string;
-  /**
-   * Whether the validation was incremental (read-only)
-   */
-  incremental?: boolean;
-  /**
-   * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * The results of tested Explores (read-only)
-   */
-  result?: ISqlValidatorTestedExplore[];
-}
-
-export interface ISqlValidatorTestedExplore {
-  /**
-   * LookML model that was tested (read-only)
-   */
-  model?: string;
-  /**
-   * LookML Explore that was tested (read-only)
-   */
-  explore?: string;
-  /**
-   * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Reason the validation was skipped (read-only)
-   */
-  skip_reason?: string | null;
-  /**
-   * Total number of failed validations (read-only)
-   */
-  error_count?: number | null;
-  /**
-   * Details of the LookML that failed SQL validation (read-only)
-   */
-  errors?: ISqlValidatorErrorItem[];
-}
-
 export interface ISshPublicKey {
   /**
    * The SSH public key created for this instance (read-only)
@@ -14370,6 +13803,18 @@ export interface IThemeSettings {
    * Default background color
    */
   background_color?: string;
+  /**
+   * URL for background image
+   */
+  background_image_url?: string | null;
+  /**
+   * Optional. ID of theme background image.
+   */
+  background_image_id?: string | null;
+  /**
+   * Background image opacity (0.0 to 1.0).
+   */
+  background_opacity?: number | null;
   /**
    * Base font size for scaling fonts (only supported by legacy dashboards)
    */
@@ -15812,6 +15257,10 @@ export interface IWriteDashboard {
   title_color?: string | null;
   appearance?: IDashboardAppearance | null;
   /**
+   * The layout granularity to apply to this dashboard (ie: default or granular)
+   */
+  layout_granularity?: string | null;
+  /**
    * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
    */
   preserve_desktop_layout?: boolean;
@@ -15852,6 +15301,10 @@ export interface IWriteDashboardElement {
    * Id of Dashboard Layout
    */
   dashboard_layout_id?: string | null;
+  /**
+   * ID of the group to place this element under in the layout
+   */
+  group_id?: string | null;
   /**
    * Dynamic writeable type for LookWithQuery removes:
    * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
@@ -15940,6 +15393,10 @@ export interface IWriteDashboardElement {
    * ui_status, user_name, updated_at
    */
   certification_metadata?: IWriteCertification | null;
+  /**
+   * ID of Dashboard Image
+   */
+  image_id?: string | null;
 }
 
 /**
@@ -16089,6 +15546,10 @@ export interface IWriteDashboardLayoutComponent {
    * Height (granular layout)
    */
   granular_height?: number | null;
+  /**
+   * Id of parent Dashboard Layout Component group
+   */
+  group_id?: string | null;
 }
 
 /**
@@ -16544,19 +16005,8 @@ export interface IWriteGitBranch {
 }
 
 /**
- * Dynamic writeable type for GitDiagnosticReport removes:
- * can, id, project_id, user_id, state, status, created_at, updated_at, issues
- */
-export interface IWriteGitDiagnosticReport {
-  /**
-   * Project structure type.
-   */
-  project_type?: string | null;
-}
-
-/**
  * Dynamic writeable type for GoldenQuery removes:
- * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id
+ * can, id, query_id, is_active, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id, pivots, dynamic_fields
  */
 export interface IWriteGoldenQuery {
   /**
@@ -16567,10 +16017,6 @@ export interface IWriteGoldenQuery {
    * The Explore URL representing the answer to the question
    */
   answer?: string;
-  /**
-   * Whether this golden question should be utilized by the agent
-   */
-  is_active?: boolean;
 }
 
 /**
@@ -16973,6 +16419,11 @@ export interface IWriteMcpTools {
    * description, category, access_level
    */
   get_explores?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  get_field_value_suggestions?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
    * description, category, access_level

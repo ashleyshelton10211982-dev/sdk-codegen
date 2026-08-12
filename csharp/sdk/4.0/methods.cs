@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 518 API methods
+/// 514 API methods
 
 #nullable enable
 using System;
@@ -3762,6 +3762,23 @@ namespace Looker.SDK.API40
       { "fields", fields }},body,options);
   }
 
+  /// ### Get LookML of a UDD Agent
+  ///
+  /// Returns the LookML representation of a user-defined (UDD) agent.
+  ///
+  /// GET /agents/lookml/{agent_id} -> AgentLookml
+  ///
+  /// <returns><c>AgentLookml</c> lookml of agent (application/json)</returns>
+  ///
+  /// <param name="agent_id">Id of agent</param>
+  public async Task<SdkResponse<AgentLookml, Exception>> agent_lookml(
+    string agent_id,
+    ITransportSettings? options = null)
+{  
+      agent_id = SdkUtils.EncodeParam(agent_id);
+    return await AuthRequest<AgentLookml, Exception>(HttpMethod.Get, $"/agents/lookml/{agent_id}", null,null,options);
+  }
+
   /// ### Get All Conversation Messages
   ///
   /// Get all conversation messages.
@@ -4398,6 +4415,8 @@ namespace Looker.SDK.API40
   /// Boolean search params accept only "true" and "false" as values.
   ///
   ///
+  /// **Note:** When searching and sorting by `title`, the search uses the `dashboard_name` defined in the LookML code, rather than the user-facing display title.
+  ///
   /// The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
   ///
   /// Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
@@ -4407,12 +4426,12 @@ namespace Looker.SDK.API40
   /// <returns><c>DashboardLookml</c> dashboards (application/json)</returns>
   ///
   /// <param name="folder_id">Filter on a particular folder.</param>
-  /// <param name="title">Match LookML Dashboard title.</param>
+  /// <param name="title">Match LookML Dashboard title. Note: This matches on the dashboard_name defined in the LookML code, not the display title.</param>
   /// <param name="content_favorite_id">Filter on a content favorite id.</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
-  /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]</param>
+  /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]. Note: Sorting by title sorts by the dashboard_name defined in the LookML code, not the display title.</param>
   public async Task<SdkResponse<DashboardLookml, Exception>> search_lookml_dashboards(
     string? folder_id = null,
     string? title = null,
@@ -6882,52 +6901,6 @@ namespace Looker.SDK.API40
 
   #region Project: Manage Projects
 
-  /// ### Fetches a CI Run.
-  ///
-  /// This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
-  ///
-  /// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
-  ///
-  /// <returns><c>ProjectRun</c> CI Run (application/json)</returns>
-  ///
-  /// <param name="project_id">Project Id</param>
-  /// <param name="run_id">Run Id</param>
-  /// <param name="fields">Requested fields</param>
-  [Obsolete("Deprecated")]
-  public async Task<SdkResponse<ProjectRun, Exception>> get_ci_run(
-    string project_id,
-    string run_id,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      project_id = SdkUtils.EncodeParam(project_id);
-      run_id = SdkUtils.EncodeParam(run_id);
-    return await AuthRequest<ProjectRun, Exception>(HttpMethod.Get, $"/projects/{project_id}/ci/runs/{run_id}", new Values {
-      { "fields", fields }},null,options);
-  }
-
-  /// ### Creates a CI Run.
-  ///
-  /// This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
-  ///
-  /// POST /projects/{project_id}/ci/run -> CreateCIRunResponse
-  ///
-  /// <returns><c>CreateCIRunResponse</c> CI Run (application/json)</returns>
-  ///
-  /// <param name="project_id">Project Id</param>
-  /// <param name="fields">Requested fields</param>
-  [Obsolete("Deprecated")]
-  public async Task<SdkResponse<CreateCIRunResponse, Exception>> create_ci_run(
-    string project_id,
-    CreateCIRunRequest body,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<CreateCIRunResponse, Exception>(HttpMethod.Post, $"/projects/{project_id}/ci/run", new Values {
-      { "fields", fields }},body,options);
-  }
-
   /// ### Creates and queues a Continuous Integration Run.
   ///
   /// POST /projects/{project_id}/continuous_integration/runs -> CIRun
@@ -7667,59 +7640,6 @@ namespace Looker.SDK.API40
       { "commit_sha", commit_sha },
       { "tag_name", tag_name },
       { "tag_message", tag_message }},body,options);
-  }
-
-  /// ### Initiate Git Diagnosis Suite
-  ///
-  /// POST /projects/{project_id}/git_diagnostic_report -> GitDiagnosticReport
-  ///
-  /// <returns><c>GitDiagnosticReport</c> GitDiagnosticReport (application/json)</returns>
-  ///
-  /// <param name="project_id">Looker Project ID</param>
-  public async Task<SdkResponse<GitDiagnosticReport, Exception>> create_git_diagnostic_report(
-    string project_id,
-    WriteGitDiagnosticReport body,
-    ITransportSettings? options = null)
-{  
-      project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<GitDiagnosticReport, Exception>(HttpMethod.Post, $"/projects/{project_id}/git_diagnostic_report", null,body,options);
-  }
-
-  /// ### Retrieve Live Git Diagnostic Suite Execution Status
-  ///
-  /// GET /projects/{project_id}/git_diagnostic_report/{report_id} -> GitDiagnosticReport
-  ///
-  /// <returns><c>GitDiagnosticReport</c> GitDiagnosticReport (application/json)</returns>
-  ///
-  /// <param name="project_id">Looker Project ID</param>
-  /// <param name="report_id">Report ID</param>
-  public async Task<SdkResponse<GitDiagnosticReport, Exception>> get_git_diagnostic_report(
-    string project_id,
-    string report_id,
-    ITransportSettings? options = null)
-{  
-      project_id = SdkUtils.EncodeParam(project_id);
-      report_id = SdkUtils.EncodeParam(report_id);
-    return await AuthRequest<GitDiagnosticReport, Exception>(HttpMethod.Get, $"/projects/{project_id}/git_diagnostic_report/{report_id}", null,null,options);
-  }
-
-  /// ### Repair Git Configuration Issues
-  ///
-  /// POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> GitDiagnosticReport
-  ///
-  /// <returns><c>GitDiagnosticReport</c> GitDiagnosticReport (application/json)</returns>
-  ///
-  /// <param name="project_id">Looker Project ID</param>
-  /// <param name="report_id">Report ID</param>
-  public async Task<SdkResponse<GitDiagnosticReport, Exception>> repair_git_diagnostic_report(
-    string project_id,
-    string report_id,
-    WriteGitDiagnosticReport body,
-    ITransportSettings? options = null)
-{  
-      project_id = SdkUtils.EncodeParam(project_id);
-      report_id = SdkUtils.EncodeParam(report_id);
-    return await AuthRequest<GitDiagnosticReport, Exception>(HttpMethod.Post, $"/projects/{project_id}/git_diagnostic_report/{report_id}/repair", null,body,options);
   }
 
   /// ### Configure Repository Credential for a remote dependency
@@ -10382,6 +10302,142 @@ namespace Looker.SDK.API40
       { "filter_or", filter_or }},null,options);
   }
 
+  /// ### Email/password login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// GET /users/{user_id}/credentials_email -> CredentialsEmail
+  ///
+  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsEmail, Exception>> user_credentials_email(
+    string user_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_email", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Email/password login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// POST /users/{user_id}/credentials_email -> CredentialsEmail
+  ///
+  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email(
+    string user_id,
+    WriteCredentialsEmail body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Email/password login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// PATCH /users/{user_id}/credentials_email -> CredentialsEmail
+  ///
+  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsEmail, Exception>> update_user_credentials_email(
+    string user_id,
+    WriteCredentialsEmail body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Patch, $"/users/{user_id}/credentials_email", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Email/password login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// DELETE /users/{user_id}/credentials_email -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_email(
+    string user_id,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_email", null,null,options);
+  }
+
+  /// ### Create a password reset token.
+  /// This will create a cryptographically secure random password reset token for the user.
+  /// If the user already has a password reset token then this invalidates the old token and creates a new one.
+  /// The token is expressed as the 'password_reset_url' of the user's email/password credential object.
+  /// This takes an optional 'expires' param to indicate if the new token should be an expiring token.
+  /// Tokens that expire are typically used for self-service password resets for existing users.
+  /// Invitation emails for new users typically are not set to expire.
+  /// The expire period is always 60 minutes when expires is enabled.
+  /// This method can be called with an empty body.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
+  ///
+  /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="expires">Expiring token.</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email_password_reset(
+    string user_id,
+    bool? expires = null,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email/password_reset", new Values {
+      { "expires", expires },
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Send a password reset token.
+  /// This will send a password reset email to the user. If a password reset token does not already exist
+  /// for this user, it will create one and then send it.
+  /// If the user has not yet set up their account, it will send a setup email to the user.
+  /// The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
+  /// Password reset URLs will expire in 60 minutes.
+  /// This method can be called with an empty body.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
+  ///
+  /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsEmail, Exception>> send_user_credentials_email_password_reset(
+    string user_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email/send_password_reset", new Values {
+      { "fields", fields }},null,options);
+  }
+
   /// ### Get information about the current user; i.e. the user account currently calling the API.
   ///
   /// GET /user -> User
@@ -10764,85 +10820,6 @@ namespace Looker.SDK.API40
 {  
       user_id = SdkUtils.EncodeParam(user_id);
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/service_accounts/{user_id}", null,null,options);
-  }
-
-  /// ### Email/password login information for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// GET /users/{user_id}/credentials_email -> CredentialsEmail
-  ///
-  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsEmail, Exception>> user_credentials_email(
-    string user_id,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_email", new Values {
-      { "fields", fields }},null,options);
-  }
-
-  /// ### Email/password login information for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// POST /users/{user_id}/credentials_email -> CredentialsEmail
-  ///
-  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email(
-    string user_id,
-    WriteCredentialsEmail body,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email", new Values {
-      { "fields", fields }},body,options);
-  }
-
-  /// ### Email/password login information for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// PATCH /users/{user_id}/credentials_email -> CredentialsEmail
-  ///
-  /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsEmail, Exception>> update_user_credentials_email(
-    string user_id,
-    WriteCredentialsEmail body,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Patch, $"/users/{user_id}/credentials_email", new Values {
-      { "fields", fields }},body,options);
-  }
-
-  /// ### Email/password login information for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// DELETE /users/{user_id}/credentials_email -> string
-  ///
-  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  public async Task<SdkResponse<string, Exception>> delete_user_credentials_email(
-    string user_id,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_email", null,null,options);
   }
 
   /// ### Two-factor login information for the specified user.
@@ -11293,37 +11270,6 @@ namespace Looker.SDK.API40
       { "fields", fields }},null,options);
   }
 
-  /// ### Create a password reset token.
-  /// This will create a cryptographically secure random password reset token for the user.
-  /// If the user already has a password reset token then this invalidates the old token and creates a new one.
-  /// The token is expressed as the 'password_reset_url' of the user's email/password credential object.
-  /// This takes an optional 'expires' param to indicate if the new token should be an expiring token.
-  /// Tokens that expire are typically used for self-service password resets for existing users.
-  /// Invitation emails for new users typically are not set to expire.
-  /// The expire period is always 60 minutes when expires is enabled.
-  /// This method can be called with an empty body.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
-  ///
-  /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  /// <param name="expires">Expiring token.</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email_password_reset(
-    string user_id,
-    bool? expires = null,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email/password_reset", new Values {
-      { "expires", expires },
-      { "fields", fields }},null,options);
-  }
-
   /// ### Get information about roles of a given user
   ///
   /// GET /users/{user_id}/roles -> Role[]
@@ -11448,32 +11394,6 @@ namespace Looker.SDK.API40
       user_id = SdkUtils.EncodeParam(user_id);
       user_attribute_id = SdkUtils.EncodeParam(user_attribute_id);
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,null,options);
-  }
-
-  /// ### Send a password reset token.
-  /// This will send a password reset email to the user. If a password reset token does not already exist
-  /// for this user, it will create one and then send it.
-  /// If the user has not yet set up their account, it will send a setup email to the user.
-  /// The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
-  /// Password reset URLs will expire in 60 minutes.
-  /// This method can be called with an empty body.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
-  ///
-  /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsEmail, Exception>> send_user_credentials_email_password_reset(
-    string user_id,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_email/send_password_reset", new Values {
-      { "fields", fields }},null,options);
   }
 
   /// ### Change a disabled user's email addresses

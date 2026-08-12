@@ -25,7 +25,7 @@
  */
 
 /**
- * 518 API methods
+ * 514 API methods
  */
 
 
@@ -4342,6 +4342,25 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Get LookML of a UDD Agent
+     *
+     * Returns the LookML representation of a user-defined (UDD) agent.
+     *
+     * GET /agents/lookml/{agent_id} -> AgentLookml
+     */
+    public func agent_lookml(
+        /**
+         * @param {String} agent_id Id of agent
+         */
+        _ agent_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_agent_id = encodeParam(agent_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/agents/lookml/\(path_agent_id)", nil, nil, options)
+        return result
+    }
+
+    /**
      * ### Get All Conversation Messages
      *
      * Get all conversation messages.
@@ -5107,6 +5126,8 @@ open class LookerSDKStream: APIMethods {
      * Boolean search params accept only "true" and "false" as values.
      *
      *
+     * **Note:** When searching and sorting by `title`, the search uses the `dashboard_name` defined in the LookML code, rather than the user-facing display title.
+     *
      * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
      *
      * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
@@ -5119,7 +5140,7 @@ open class LookerSDKStream: APIMethods {
          */
         folder_id: String? = nil,
         /**
-         * @param {String} title Match LookML Dashboard title.
+         * @param {String} title Match LookML Dashboard title. Note: This matches on the dashboard_name defined in the LookML code, not the display title.
          */
         title: String? = nil,
         /**
@@ -5139,7 +5160,7 @@ open class LookerSDKStream: APIMethods {
          */
         offset: Int64? = nil,
         /**
-         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]
+         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]. Note: Sorting by title sorts by the dashboard_name defined in the LookML code, not the display title.
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
@@ -8120,65 +8141,6 @@ open class LookerSDKStream: APIMethods {
     // MARK Project: Manage Projects
 
     /**
-     * ### Fetches a CI Run.
-     *
-     * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
-     *
-     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
-     */
-    @available(*, deprecated)
-    public func get_ci_run(
-        /**
-         * @param {String} project_id Project Id
-         */
-        _ project_id: String,
-        /**
-         * @param {String} run_id Run Id
-         */
-        _ run_id: String,
-        /**
-         * @param {String} fields Requested fields
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let path_run_id = encodeParam(run_id)
-        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
-            ["fields": fields], nil, options)
-        return result
-    }
-
-    /**
-     * ### Creates a CI Run.
-     *
-     * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
-     *
-     * POST /projects/{project_id}/ci/run -> CreateCIRunResponse
-     */
-    @available(*, deprecated)
-    public func create_ci_run(
-        /**
-         * @param {String} project_id Project Id
-         */
-        _ project_id: String,
-        /**
-         * @param {CreateCIRunRequest} body
-         */
-        _ body: CreateCIRunRequest,
-        /**
-         * @param {String} fields Requested fields
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(path_project_id)/ci/run", 
-            ["fields": fields], try! self.encode(body), options)
-        return result
-    }
-
-    /**
      * ### Creates and queues a Continuous Integration Run.
      *
      * POST /projects/{project_id}/continuous_integration/runs -> CIRun
@@ -9028,75 +8990,6 @@ open class LookerSDKStream: APIMethods {
         let path_project_id = encodeParam(project_id)
         let result: SDKResponse<Data, SDKError> = self.post("/projects/\(path_project_id)/tag", 
             ["commit_sha": commit_sha, "tag_name": tag_name, "tag_message": tag_message], try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Initiate Git Diagnosis Suite
-     *
-     * POST /projects/{project_id}/git_diagnostic_report -> GitDiagnosticReport
-     */
-    public func create_git_diagnostic_report(
-        /**
-         * @param {String} project_id Looker Project ID
-         */
-        _ project_id: String,
-        /**
-         * @param {WriteGitDiagnosticReport} body
-         */
-        _ body: WriteGitDiagnosticReport,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(path_project_id)/git_diagnostic_report", nil, try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Retrieve Live Git Diagnostic Suite Execution Status
-     *
-     * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> GitDiagnosticReport
-     */
-    public func get_git_diagnostic_report(
-        /**
-         * @param {String} project_id Looker Project ID
-         */
-        _ project_id: String,
-        /**
-         * @param {String} report_id Report ID
-         */
-        _ report_id: String,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let path_report_id = encodeParam(report_id)
-        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(path_project_id)/git_diagnostic_report/\(path_report_id)", nil, nil, options)
-        return result
-    }
-
-    /**
-     * ### Repair Git Configuration Issues
-     *
-     * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> GitDiagnosticReport
-     */
-    public func repair_git_diagnostic_report(
-        /**
-         * @param {String} project_id Looker Project ID
-         */
-        _ project_id: String,
-        /**
-         * @param {String} report_id Report ID
-         */
-        _ report_id: String,
-        /**
-         * @param {WriteGitDiagnosticReport} body
-         */
-        _ body: WriteGitDiagnosticReport,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let path_report_id = encodeParam(report_id)
-        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(path_project_id)/git_diagnostic_report/\(path_report_id)/repair", nil, try! self.encode(body), options)
         return result
     }
 
@@ -12151,6 +12044,171 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Email/password login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * GET /users/{user_id}/credentials_email -> CredentialsEmail
+     */
+    public func user_credentials_email(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(path_user_id)/credentials_email", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Email/password login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * POST /users/{user_id}/credentials_email -> CredentialsEmail
+     */
+    public func create_user_credentials_email(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {WriteCredentialsEmail} body
+         */
+        _ body: WriteCredentialsEmail,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Email/password login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
+     */
+    public func update_user_credentials_email(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {WriteCredentialsEmail} body
+         */
+        _ body: WriteCredentialsEmail,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.patch("/users/\(path_user_id)/credentials_email", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Email/password login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * DELETE /users/{user_id}/credentials_email -> String
+     */
+    public func delete_user_credentials_email(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(path_user_id)/credentials_email", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a password reset token.
+     * This will create a cryptographically secure random password reset token for the user.
+     * If the user already has a password reset token then this invalidates the old token and creates a new one.
+     * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
+     * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
+     * Tokens that expire are typically used for self-service password resets for existing users.
+     * Invitation emails for new users typically are not set to expire.
+     * The expire period is always 60 minutes when expires is enabled.
+     * This method can be called with an empty body.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
+     */
+    public func create_user_credentials_email_password_reset(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {Bool} expires Expiring token.
+         */
+        expires: Bool? = nil,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email/password_reset", 
+            ["expires": expires as Any?, "fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Send a password reset token.
+     * This will send a password reset email to the user. If a password reset token does not already exist
+     * for this user, it will create one and then send it.
+     * If the user has not yet set up their account, it will send a setup email to the user.
+     * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
+     * Password reset URLs will expire in 60 minutes.
+     * This method can be called with an empty body.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
+     */
+    public func send_user_credentials_email_password_reset(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email/send_password_reset", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
      * ### Get information about the current user; i.e. the user account currently calling the API.
      *
      * GET /user -> User
@@ -12609,105 +12667,6 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_user_id = encodeParam(user_id)
         let result: SDKResponse<Data, SDKError> = self.delete("/users/service_accounts/\(path_user_id)", nil, nil, options)
-        return result
-    }
-
-    /**
-     * ### Email/password login information for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * GET /users/{user_id}/credentials_email -> CredentialsEmail
-     */
-    public func user_credentials_email(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.get("/users/\(path_user_id)/credentials_email", 
-            ["fields": fields], nil, options)
-        return result
-    }
-
-    /**
-     * ### Email/password login information for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * POST /users/{user_id}/credentials_email -> CredentialsEmail
-     */
-    public func create_user_credentials_email(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        /**
-         * @param {WriteCredentialsEmail} body
-         */
-        _ body: WriteCredentialsEmail,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email", 
-            ["fields": fields], try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Email/password login information for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
-     */
-    public func update_user_credentials_email(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        /**
-         * @param {WriteCredentialsEmail} body
-         */
-        _ body: WriteCredentialsEmail,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.patch("/users/\(path_user_id)/credentials_email", 
-            ["fields": fields], try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Email/password login information for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * DELETE /users/{user_id}/credentials_email -> String
-     */
-    public func delete_user_credentials_email(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(path_user_id)/credentials_email", nil, nil, options)
         return result
     }
 
@@ -13258,42 +13217,6 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * ### Create a password reset token.
-     * This will create a cryptographically secure random password reset token for the user.
-     * If the user already has a password reset token then this invalidates the old token and creates a new one.
-     * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
-     * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
-     * Tokens that expire are typically used for self-service password resets for existing users.
-     * Invitation emails for new users typically are not set to expire.
-     * The expire period is always 60 minutes when expires is enabled.
-     * This method can be called with an empty body.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
-     */
-    public func create_user_credentials_email_password_reset(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        /**
-         * @param {Bool} expires Expiring token.
-         */
-        expires: Bool? = nil,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email/password_reset", 
-            ["expires": expires as Any?, "fields": fields], nil, options)
-        return result
-    }
-
-    /**
      * ### Get information about roles of a given user
      *
      * GET /users/{user_id}/roles -> [Role]
@@ -13446,36 +13369,6 @@ open class LookerSDKStream: APIMethods {
         let path_user_id = encodeParam(user_id)
         let path_user_attribute_id = encodeParam(user_attribute_id)
         let result: SDKResponse<Data, SDKError> = self.delete("/users/\(path_user_id)/attribute_values/\(path_user_attribute_id)", nil, nil, options)
-        return result
-    }
-
-    /**
-     * ### Send a password reset token.
-     * This will send a password reset email to the user. If a password reset token does not already exist
-     * for this user, it will create one and then send it.
-     * If the user has not yet set up their account, it will send a setup email to the user.
-     * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
-     * Password reset URLs will expire in 60 minutes.
-     * This method can be called with an empty body.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
-     */
-    public func send_user_credentials_email_password_reset(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.post("/users/\(path_user_id)/credentials_email/send_password_reset", 
-            ["fields": fields], nil, options)
         return result
     }
 

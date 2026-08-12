@@ -25,7 +25,7 @@
  */
 
 /**
- * 461 API models: 363 Spec, 0 Request, 72 Write, 26 Enum
+ * 434 API models: 337 Spec, 0 Request, 71 Write, 26 Enum
  */
 
 
@@ -287,6 +287,37 @@ public struct Agent: SDKModel {
         self.code_interpreter = code_interpreter
         self._studio_agent_id = studio_agent_id.map(AnyString.init)
         self.workflow_params = workflow_params
+    }
+
+}
+
+public struct AgentLookml: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _agent_id = "agent_id"
+        case _lookml = "lookml"
+    }
+    private var _agent_id: AnyString?
+    /**
+     * Id of Agent (read-only)
+     */
+    public var agent_id: String? {
+        get { _agent_id?.value }
+        set { _agent_id = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml: AnyString?
+    /**
+     * lookml of UDD Agent (read-only)
+     */
+    public var lookml: String? {
+        get { _lookml?.value }
+        set { _lookml = newValue.map(AnyString.init) }
+    }
+
+    public init(agent_id: String? = nil, lookml: String? = nil) {
+        self._agent_id = agent_id.map(AnyString.init)
+        self._lookml = lookml.map(AnyString.init)
     }
 
 }
@@ -1444,240 +1475,6 @@ public struct ArtifactUsage: SDKModel {
 
     public init(_ max_size: Int64, _ usage: Int64) {
         self.init(max_size: max_size, usage: usage)
-    }
-
-}
-
-public struct AssertValidatorErrorItem: SDKModel {
-    public var assert_error: AssertValidatorTestError?
-
-    public var generic_error: GenericError?
-
-    public init(assert_error: AssertValidatorTestError? = nil, generic_error: GenericError? = nil) {
-        self.assert_error = assert_error
-        self.generic_error = generic_error
-    }
-
-}
-
-public struct AssertValidatorResult: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _name = "name"
-        case _status = "status"
-        case results
-    }
-    private var _name: AnyString?
-    /**
-     * Name of the validator (assert) (read-only)
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Results of the validation (read-only)
-     */
-    public var results: [AssertValidatorTestedExplore]?
-
-    public init(name: String? = nil, status: String? = nil, results: [AssertValidatorTestedExplore]? = nil) {
-        self._name = name.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self.results = results
-    }
-
-}
-
-public struct AssertValidatorTestedExplore: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _error_count = "error_count"
-        case errors
-        case _success_count = "success_count"
-        case successes
-    }
-    private var _error_count: AnyInt?
-    /**
-     * Total number of failed data tests (read-only)
-     */
-    public var error_count: Int64? {
-        get { _error_count?.value }
-        set { _error_count = newValue.map(AnyInt.init) }
-    }
-
-    /**
-     * Details of data tests that failed validation (read-only)
-     */
-    public var errors: [AssertValidatorErrorItem]?
-
-    private var _success_count: AnyString?
-    /**
-     * Total number of successful data tests (read-only)
-     */
-    public var success_count: String? {
-        get { _success_count?.value }
-        set { _success_count = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Details of data tests that passed validation (read-only)
-     */
-    public var successes: [AssertValidatorTestSuccess]?
-
-    public init(error_count: Int64? = nil, errors: [AssertValidatorErrorItem]? = nil, success_count: String? = nil, successes: [AssertValidatorTestSuccess]? = nil) {
-        self._error_count = error_count.map(AnyInt.init)
-        self.errors = errors
-        self._success_count = success_count.map(AnyString.init)
-        self.successes = successes
-    }
-
-}
-
-public struct AssertValidatorTestError: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _model = "model"
-        case _explore = "explore"
-        case _test_name = "test_name"
-        case _explore_url = "explore_url"
-        case _lookml_url = "lookml_url"
-        case _message = "message"
-    }
-    private var _model: AnyString?
-    /**
-     * LookML model that contains the data test (read-only)
-     */
-    public var model: String? {
-        get { _model?.value }
-        set { _model = newValue.map(AnyString.init) }
-    }
-
-    private var _explore: AnyString?
-    /**
-     * LookML Explore that is used as the explore_source for the data test (read-only)
-     */
-    public var explore: String? {
-        get { _explore?.value }
-        set { _explore = newValue.map(AnyString.init) }
-    }
-
-    private var _test_name: AnyString?
-    /**
-     * Name of the data test (read-only)
-     */
-    public var test_name: String? {
-        get { _test_name?.value }
-        set { _test_name = newValue.map(AnyString.init) }
-    }
-
-    private var _explore_url: AnyString?
-    /**
-     * URL to the Explore (read-only)
-     */
-    public var explore_url: String? {
-        get { _explore_url?.value }
-        set { _explore_url = newValue.map(AnyString.init) }
-    }
-
-    private var _lookml_url: AnyString?
-    /**
-     * URL to the LookML file where the data test is defined (read-only)
-     */
-    public var lookml_url: String? {
-        get { _lookml_url?.value }
-        set { _lookml_url = newValue.map(AnyString.init) }
-    }
-
-    private var _message: AnyString?
-    /**
-     * Message returned by the data test (read-only)
-     */
-    public var message: String? {
-        get { _message?.value }
-        set { _message = newValue.map(AnyString.init) }
-    }
-
-    public init(model: String? = nil, explore: String? = nil, test_name: String? = nil, explore_url: String? = nil, lookml_url: String? = nil, message: String? = nil) {
-        self._model = model.map(AnyString.init)
-        self._explore = explore.map(AnyString.init)
-        self._test_name = test_name.map(AnyString.init)
-        self._explore_url = explore_url.map(AnyString.init)
-        self._lookml_url = lookml_url.map(AnyString.init)
-        self._message = message.map(AnyString.init)
-    }
-
-}
-
-public struct AssertValidatorTestSuccess: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _model = "model"
-        case _explore = "explore"
-        case _test_name = "test_name"
-        case _explore_url = "explore_url"
-        case _lookml_url = "lookml_url"
-    }
-    private var _model: AnyString?
-    /**
-     * LookML model that contains the data test (read-only)
-     */
-    public var model: String? {
-        get { _model?.value }
-        set { _model = newValue.map(AnyString.init) }
-    }
-
-    private var _explore: AnyString?
-    /**
-     * LookML Explore that is used as the explore_source for the data test (read-only)
-     */
-    public var explore: String? {
-        get { _explore?.value }
-        set { _explore = newValue.map(AnyString.init) }
-    }
-
-    private var _test_name: AnyString?
-    /**
-     * Name of the data test (read-only)
-     */
-    public var test_name: String? {
-        get { _test_name?.value }
-        set { _test_name = newValue.map(AnyString.init) }
-    }
-
-    private var _explore_url: AnyString?
-    /**
-     * URL to the Explore (read-only)
-     */
-    public var explore_url: String? {
-        get { _explore_url?.value }
-        set { _explore_url = newValue.map(AnyString.init) }
-    }
-
-    private var _lookml_url: AnyString?
-    /**
-     * URL to the LookML file where the data test is defined (read-only)
-     */
-    public var lookml_url: String? {
-        get { _lookml_url?.value }
-        set { _lookml_url = newValue.map(AnyString.init) }
-    }
-
-    public init(model: String? = nil, explore: String? = nil, test_name: String? = nil, explore_url: String? = nil, lookml_url: String? = nil) {
-        self._model = model.map(AnyString.init)
-        self._explore = explore.map(AnyString.init)
-        self._test_name = test_name.map(AnyString.init)
-        self._explore_url = explore_url.map(AnyString.init)
-        self._lookml_url = lookml_url.map(AnyString.init)
     }
 
 }
@@ -2878,59 +2675,6 @@ public struct CIAssertValidatorTestSuccess: SDKModel {
 
 }
 
-public struct CIChangeRequest: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _change_request_number = "change_request_number"
-        case _change_request_url = "change_request_url"
-        case _change_request_name = "change_request_name"
-        case _change_request_commits_url = "change_request_commits_url"
-    }
-    private var _change_request_number: AnyInt?
-    /**
-     * Numeric identifier of the change request (read-only)
-     */
-    public var change_request_number: Int64? {
-        get { _change_request_number?.value }
-        set { _change_request_number = newValue.map(AnyInt.init) }
-    }
-
-    private var _change_request_url: AnyString?
-    /**
-     * URL of the change request (read-only)
-     */
-    public var change_request_url: String? {
-        get { _change_request_url?.value }
-        set { _change_request_url = newValue.map(AnyString.init) }
-    }
-
-    private var _change_request_name: AnyString?
-    /**
-     * Name of the change request (read-only)
-     */
-    public var change_request_name: String? {
-        get { _change_request_name?.value }
-        set { _change_request_name = newValue.map(AnyString.init) }
-    }
-
-    private var _change_request_commits_url: AnyString?
-    /**
-     * For PR-triggered CI runs, the URL to the change request commit that triggered the run. (read-only)
-     */
-    public var change_request_commits_url: String? {
-        get { _change_request_commits_url?.value }
-        set { _change_request_commits_url = newValue.map(AnyString.init) }
-    }
-
-    public init(change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil) {
-        self._change_request_number = change_request_number.map(AnyInt.init)
-        self._change_request_url = change_request_url.map(AnyString.init)
-        self._change_request_name = change_request_name.map(AnyString.init)
-        self._change_request_commits_url = change_request_commits_url.map(AnyString.init)
-    }
-
-}
-
 public struct CIContentValidatorContentError: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -3286,59 +3030,6 @@ public struct CIGenericError: SDKModel {
 
 }
 
-public struct CIGitState: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _branch = "branch"
-        case _repository = "repository"
-        case _commit_ref = "commit_ref"
-        case _target = "target"
-    }
-    private var _branch: AnyString?
-    /**
-     * Git branch that the CI run validates (read-only)
-     */
-    public var branch: String? {
-        get { _branch?.value }
-        set { _branch = newValue.map(AnyString.init) }
-    }
-
-    private var _repository: AnyString?
-    /**
-     * Git repository that contains the Git branch being validated (read-only)
-     */
-    public var repository: String? {
-        get { _repository?.value }
-        set { _repository = newValue.map(AnyString.init) }
-    }
-
-    private var _commit_ref: AnyString?
-    /**
-     * Git commit that the CI run validates (read-only)
-     */
-    public var commit_ref: String? {
-        get { _commit_ref?.value }
-        set { _commit_ref = newValue.map(AnyString.init) }
-    }
-
-    private var _target: AnyString?
-    /**
-     * For incremental runs, the Git branch that the CI run compares against during validation (read-only)
-     */
-    public var target: String? {
-        get { _target?.value }
-        set { _target = newValue.map(AnyString.init) }
-    }
-
-    public init(branch: String? = nil, repository: String? = nil, commit_ref: String? = nil, target: String? = nil) {
-        self._branch = branch.map(AnyString.init)
-        self._repository = repository.map(AnyString.init)
-        self._commit_ref = commit_ref.map(AnyString.init)
-        self._target = target.map(AnyString.init)
-    }
-
-}
-
 public struct CILookMLValidatorError: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -3577,6 +3268,9 @@ public struct CIRun: SDKModel {
         case _git_target_branch_name = "git_target_branch_name"
         case _git_status_url = "git_status_url"
         case _git_target_url = "git_target_url"
+        case _dbt_cloud_git_branch_name = "dbt_cloud_git_branch_name"
+        case _dbt_cloud_git_commit_ref = "dbt_cloud_git_commit_ref"
+        case _dbt_cloud_git_repository_name = "dbt_cloud_git_repository_name"
         case created_at
         case started_at
         case finished_at
@@ -3774,6 +3468,33 @@ public struct CIRun: SDKModel {
         set { _git_target_url = newValue.map(AnyString.init) }
     }
 
+    private var _dbt_cloud_git_branch_name: AnyString?
+    /**
+     * Git branch name in dbt Cloud
+     */
+    public var dbt_cloud_git_branch_name: String? {
+        get { _dbt_cloud_git_branch_name?.value }
+        set { _dbt_cloud_git_branch_name = newValue.map(AnyString.init) }
+    }
+
+    private var _dbt_cloud_git_commit_ref: AnyString?
+    /**
+     * Git commit ref in dbt Cloud
+     */
+    public var dbt_cloud_git_commit_ref: String? {
+        get { _dbt_cloud_git_commit_ref?.value }
+        set { _dbt_cloud_git_commit_ref = newValue.map(AnyString.init) }
+    }
+
+    private var _dbt_cloud_git_repository_name: AnyString?
+    /**
+     * Git repository name in dbt Cloud
+     */
+    public var dbt_cloud_git_repository_name: String? {
+        get { _dbt_cloud_git_repository_name?.value }
+        set { _dbt_cloud_git_repository_name = newValue.map(AnyString.init) }
+    }
+
     /**
      * Time and date that the CI run was created (read-only)
      */
@@ -3835,7 +3556,7 @@ public struct CIRun: SDKModel {
      */
     public var user_attributes: [CIRunUserAttribute]?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, ci_suite_id: String? = nil, project_id: String? = nil, status: String? = nil, title: String? = nil, trigger_type: String? = nil, user_id: Int64? = nil, triggered_by_name: String? = nil, execution_id: String? = nil, result: CIRunResult? = nil, change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil, git_service_name: String? = nil, git_commit_ref: String? = nil, git_branch_name: String? = nil, git_repository_name: String? = nil, git_target_branch_name: String? = nil, git_status_url: String? = nil, git_target_url: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, retries: Int64? = nil, assigned_ci_user_id: Int64? = nil, assigned_ci_user_at: Date? = nil, crashed_check_count: Int64? = nil, run_url: String? = nil, user_attributes: [CIRunUserAttribute]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, ci_suite_id: String? = nil, project_id: String? = nil, status: String? = nil, title: String? = nil, trigger_type: String? = nil, user_id: Int64? = nil, triggered_by_name: String? = nil, execution_id: String? = nil, result: CIRunResult? = nil, change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil, git_service_name: String? = nil, git_commit_ref: String? = nil, git_branch_name: String? = nil, git_repository_name: String? = nil, git_target_branch_name: String? = nil, git_status_url: String? = nil, git_target_url: String? = nil, dbt_cloud_git_branch_name: String? = nil, dbt_cloud_git_commit_ref: String? = nil, dbt_cloud_git_repository_name: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, retries: Int64? = nil, assigned_ci_user_id: Int64? = nil, assigned_ci_user_at: Date? = nil, crashed_check_count: Int64? = nil, run_url: String? = nil, user_attributes: [CIRunUserAttribute]? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._ci_suite_id = ci_suite_id.map(AnyString.init)
@@ -3858,6 +3579,9 @@ public struct CIRun: SDKModel {
         self._git_target_branch_name = git_target_branch_name.map(AnyString.init)
         self._git_status_url = git_status_url.map(AnyString.init)
         self._git_target_url = git_target_url.map(AnyString.init)
+        self._dbt_cloud_git_branch_name = dbt_cloud_git_branch_name.map(AnyString.init)
+        self._dbt_cloud_git_commit_ref = dbt_cloud_git_commit_ref.map(AnyString.init)
+        self._dbt_cloud_git_repository_name = dbt_cloud_git_repository_name.map(AnyString.init)
         self.created_at = created_at
         self.started_at = started_at
         self.finished_at = finished_at
@@ -3942,55 +3666,6 @@ public struct CIRunUserAttribute: SDKModel {
         self._id = id.map(AnyInt.init)
         self._name = name.map(AnyString.init)
         self._value = value.map(AnyString.init)
-    }
-
-}
-
-public struct CIScheduleTrigger: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case enabled
-        case _day = "day"
-        case _hour = "hour"
-        case _frequency = "frequency"
-    }
-    /**
-     * Whether the CI run schedule is active (read-only)
-     */
-    public var enabled: Bool?
-
-    private var _day: AnyString?
-    /**
-     * For scheduled runs, day of the week that the CI run is scheduled (read-only)
-     */
-    public var day: String? {
-        get { _day?.value }
-        set { _day = newValue.map(AnyString.init) }
-    }
-
-    private var _hour: AnyString?
-    /**
-     * For schedules runs, the hour of the day (24 hour format) that the CI run is scheduled (read-only)
-     */
-    public var hour: String? {
-        get { _hour?.value }
-        set { _hour = newValue.map(AnyString.init) }
-    }
-
-    private var _frequency: AnyString?
-    /**
-     * For scheduled runs, how often the CI run is scheduled to run (hourly, daily, weekly) (read-only)
-     */
-    public var frequency: String? {
-        get { _frequency?.value }
-        set { _frequency = newValue.map(AnyString.init) }
-    }
-
-    public init(enabled: Bool? = nil, day: String? = nil, hour: String? = nil, frequency: String? = nil) {
-        self.enabled = enabled
-        self._day = day.map(AnyString.init)
-        self._hour = hour.map(AnyString.init)
-        self._frequency = frequency.map(AnyString.init)
     }
 
 }
@@ -4867,6 +4542,7 @@ public struct ContentSearch: SDKModel {
         case _created_by_id = "created_by_id"
         case _certification_status = "certification_status"
         case _parent_folder_name = "parent_folder_name"
+        case _parent_project_name = "parent_project_name"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -4981,7 +4657,16 @@ public struct ContentSearch: SDKModel {
         set { _parent_folder_name = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil, created_by_id: Int64? = nil, certification_status: String? = nil, parent_folder_name: String? = nil) {
+    private var _parent_project_name: AnyString?
+    /**
+     * Name of the parent project of the content (read-only)
+     */
+    public var parent_project_name: String? {
+        get { _parent_project_name?.value }
+        set { _parent_project_name = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil, created_by_id: Int64? = nil, certification_status: String? = nil, parent_folder_name: String? = nil, parent_project_name: String? = nil) {
         self.can = can
         self._content_id = content_id.map(AnyString.init)
         self._type = type.map(AnyString.init)
@@ -4995,6 +4680,7 @@ public struct ContentSearch: SDKModel {
         self._created_by_id = created_by_id.map(AnyInt.init)
         self._certification_status = certification_status.map(AnyString.init)
         self._parent_folder_name = parent_folder_name.map(AnyString.init)
+        self._parent_project_name = parent_project_name.map(AnyString.init)
     }
 
 }
@@ -6003,169 +5689,6 @@ public struct ContentValidationScheduledPlan: SDKModel {
 
 }
 
-public struct ContentValidatorContentError: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _type = "type"
-        case _title = "title"
-        case _detail = "detail"
-        case _status = "status"
-        case _instance = "instance"
-        case _model = "model"
-        case _explore = "explore"
-        case _field_name = "field_name"
-        case _content_type = "content_type"
-        case _folder = "folder"
-        case _url = "url"
-        case _tile_type = "tile_type"
-        case _tile_title = "tile_title"
-        case _message = "message"
-    }
-    private var _type: AnyString?
-    /**
-     * A URI reference that identifies the problem type (read-only)
-     */
-    public var type: String? {
-        get { _type?.value }
-        set { _type = newValue.map(AnyString.init) }
-    }
-
-    private var _title: AnyString?
-    /**
-     * Overview of the error (read-only)
-     */
-    public var title: String? {
-        get { _title?.value }
-        set { _title = newValue.map(AnyString.init) }
-    }
-
-    private var _detail: AnyString?
-    /**
-     * Detail of the error (read-only)
-     */
-    public var detail: String? {
-        get { _detail?.value }
-        set { _detail = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * The HTTP status code for the problem (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _instance: AnyString?
-    /**
-     * URI reference that identifies the specific occurrence of the problem (read-only)
-     */
-    public var instance: String? {
-        get { _instance?.value }
-        set { _instance = newValue.map(AnyString.init) }
-    }
-
-    private var _model: AnyString?
-    /**
-     * LookML model that contains the error (read-only)
-     */
-    public var model: String? {
-        get { _model?.value }
-        set { _model = newValue.map(AnyString.init) }
-    }
-
-    private var _explore: AnyString?
-    /**
-     * LookML Explore that contains the error (read-only)
-     */
-    public var explore: String? {
-        get { _explore?.value }
-        set { _explore = newValue.map(AnyString.init) }
-    }
-
-    private var _field_name: AnyString?
-    /**
-     * LookML field that caused the error (read-only)
-     */
-    public var field_name: String? {
-        get { _field_name?.value }
-        set { _field_name = newValue.map(AnyString.init) }
-    }
-
-    private var _content_type: AnyString?
-    /**
-     * Type of the content (dashboard, look) (read-only)
-     */
-    public var content_type: String? {
-        get { _content_type?.value }
-        set { _content_type = newValue.map(AnyString.init) }
-    }
-
-    private var _folder: AnyString?
-    /**
-     * Folder of the content (read-only)
-     */
-    public var folder: String? {
-        get { _folder?.value }
-        set { _folder = newValue.map(AnyString.init) }
-    }
-
-    private var _url: AnyString?
-    /**
-     * URL of the content (read-only)
-     */
-    public var url: String? {
-        get { _url?.value }
-        set { _url = newValue.map(AnyString.init) }
-    }
-
-    private var _tile_type: AnyString?
-    /**
-     * Type of the tile (dashboard_element, dashboard_filter) (read-only)
-     */
-    public var tile_type: String? {
-        get { _tile_type?.value }
-        set { _tile_type = newValue.map(AnyString.init) }
-    }
-
-    private var _tile_title: AnyString?
-    /**
-     * Title of the tile (read-only)
-     */
-    public var tile_title: String? {
-        get { _tile_title?.value }
-        set { _tile_title = newValue.map(AnyString.init) }
-    }
-
-    private var _message: AnyString?
-    /**
-     * Message returned by the content validator (read-only)
-     */
-    public var message: String? {
-        get { _message?.value }
-        set { _message = newValue.map(AnyString.init) }
-    }
-
-    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil, model: String? = nil, explore: String? = nil, field_name: String? = nil, content_type: String? = nil, folder: String? = nil, url: String? = nil, tile_type: String? = nil, tile_title: String? = nil, message: String? = nil) {
-        self._type = type.map(AnyString.init)
-        self._title = title.map(AnyString.init)
-        self._detail = detail.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._instance = instance.map(AnyString.init)
-        self._model = model.map(AnyString.init)
-        self._explore = explore.map(AnyString.init)
-        self._field_name = field_name.map(AnyString.init)
-        self._content_type = content_type.map(AnyString.init)
-        self._folder = folder.map(AnyString.init)
-        self._url = url.map(AnyString.init)
-        self._tile_type = tile_type.map(AnyString.init)
-        self._tile_title = tile_title.map(AnyString.init)
-        self._message = message.map(AnyString.init)
-    }
-
-}
-
 public struct ContentValidatorError: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -6221,90 +5744,6 @@ public struct ContentValidatorError: SDKModel {
         self.lookml_dashboard_element = lookml_dashboard_element
         self.errors = errors
         self._id = id.map(AnyString.init)
-    }
-
-}
-
-public struct ContentValidatorErrorItem: SDKModel {
-    public var content_error: ContentValidatorContentError?
-
-    public var generic_error: GenericError?
-
-    public init(content_error: ContentValidatorContentError? = nil, generic_error: GenericError? = nil) {
-        self.content_error = content_error
-        self.generic_error = generic_error
-    }
-
-}
-
-public struct ContentValidatorResult: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _name = "name"
-        case incremental
-        case _status = "status"
-        case result
-    }
-    private var _name: AnyString?
-    /**
-     * Name of the validator (content) (read-only)
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Whether the validation was incremental (read-only)
-     */
-    public var incremental: Bool?
-
-    private var _status: AnyString?
-    /**
-     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Results of the content validation (read-only)
-     */
-    public var result: [ContentValidatorTestedExplore]?
-
-    public init(name: String? = nil, incremental: Bool? = nil, status: String? = nil, result: [ContentValidatorTestedExplore]? = nil) {
-        self._name = name.map(AnyString.init)
-        self.incremental = incremental
-        self._status = status.map(AnyString.init)
-        self.result = result
-    }
-
-}
-
-public struct ContentValidatorTestedExplore: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _error_count = "error_count"
-        case errors
-    }
-    private var _error_count: AnyInt?
-    /**
-     * Total number of failed content validations (read-only)
-     */
-    public var error_count: Int64? {
-        get { _error_count?.value }
-        set { _error_count = newValue.map(AnyInt.init) }
-    }
-
-    /**
-     * Details of the content that failed validation (read-only)
-     */
-    public var errors: [ContentValidatorErrorItem]?
-
-    public init(error_count: Int64? = nil, errors: [ContentValidatorErrorItem]? = nil) {
-        self._error_count = error_count.map(AnyInt.init)
-        self.errors = errors
     }
 
 }
@@ -6450,6 +5889,8 @@ public struct Context: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _instructions = "instructions"
+        case show_analytical_details
+        case show_debug
     }
     private var _instructions: AnyString?
     /**
@@ -6460,8 +5901,20 @@ public struct Context: SDKModel {
         set { _instructions = newValue.map(AnyString.init) }
     }
 
-    public init(instructions: String? = nil) {
+    /**
+     * Show analytical details in preview
+     */
+    public var show_analytical_details: Bool?
+
+    /**
+     * Show debug info in preview
+     */
+    public var show_debug: Bool?
+
+    public init(instructions: String? = nil, show_analytical_details: Bool? = nil, show_debug: Bool? = nil) {
         self._instructions = instructions.map(AnyString.init)
+        self.show_analytical_details = show_analytical_details
+        self.show_debug = show_debug
     }
 
 }
@@ -6779,79 +6232,6 @@ public struct CostEstimate: SDKModel {
         self.cache_hit = cache_hit
         self._cost_unit = cost_unit.map(AnyString.init)
         self._message = message.map(AnyString.init)
-    }
-
-}
-
-public struct CreateCIRunRequest: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _suite_id = "suite_id"
-        case _branch = "branch"
-        case _commit = "commit"
-    }
-    private var _suite_id: AnyString?
-    /**
-     * ID of the CI suite
-     */
-    public var suite_id: String? {
-        get { _suite_id?.value }
-        set { _suite_id = newValue.map(AnyString.init) }
-    }
-
-    private var _branch: AnyString?
-    /**
-     * Branch that the CI run should validate. Omit to test production.
-     */
-    public var branch: String? {
-        get { _branch?.value }
-        set { _branch = newValue.map(AnyString.init) }
-    }
-
-    private var _commit: AnyString?
-    /**
-     * Commit that the CI run should validate. Omit to test production.
-     */
-    public var commit: String? {
-        get { _commit?.value }
-        set { _commit = newValue.map(AnyString.init) }
-    }
-
-    public init(suite_id: String? = nil, branch: String? = nil, commit: String? = nil) {
-        self._suite_id = suite_id.map(AnyString.init)
-        self._branch = branch.map(AnyString.init)
-        self._commit = commit.map(AnyString.init)
-    }
-
-}
-
-public struct CreateCIRunResponse: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _run_id = "run_id"
-        case _status = "status"
-    }
-    private var _run_id: AnyString?
-    /**
-     * ID of the CI run (read-only)
-     */
-    public var run_id: String? {
-        get { _run_id?.value }
-        set { _run_id = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    public init(run_id: String? = nil, status: String? = nil) {
-        self._run_id = run_id.map(AnyString.init)
-        self._status = status.map(AnyString.init)
     }
 
 }
@@ -8667,6 +8047,7 @@ public struct Dashboard: SDKModel {
         case _usage_count = "usage_count"
         case is_owner_disabled
         case _url = "url"
+        case _layout_granularity = "layout_granularity"
         case preserve_desktop_layout
         case download_settings
     }
@@ -9035,6 +8416,15 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
+    private var _layout_granularity: AnyString?
+    /**
+     * The layout granularity to apply to this dashboard (ie: default or granular)
+     */
+    public var layout_granularity: String? {
+        get { _layout_granularity?.value }
+        set { _layout_granularity = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
      */
@@ -9042,7 +8432,7 @@ public struct Dashboard: SDKModel {
 
     public var download_settings: DashboardDownloadSettings?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, layout_granularity: String? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -9096,6 +8486,7 @@ public struct Dashboard: SDKModel {
         self._usage_count = usage_count.map(AnyInt.init)
         self.is_owner_disabled = is_owner_disabled
         self._url = url.map(AnyString.init)
+        self._layout_granularity = layout_granularity.map(AnyString.init)
         self.preserve_desktop_layout = preserve_desktop_layout
         self.download_settings = download_settings
     }
@@ -9468,6 +8859,7 @@ public struct DashboardElement: SDKModel {
         case _body_text_as_html = "body_text_as_html"
         case _dashboard_id = "dashboard_id"
         case _dashboard_layout_id = "dashboard_layout_id"
+        case _group_id = "group_id"
         case _edit_uri = "edit_uri"
         case _id = "id"
         case look
@@ -9497,6 +8889,7 @@ public struct DashboardElement: SDKModel {
         case _extension_id = "extension_id"
         case _aria_description = "aria_description"
         case certification_metadata
+        case _image_id = "image_id"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -9537,6 +8930,15 @@ public struct DashboardElement: SDKModel {
     public var dashboard_layout_id: String? {
         get { _dashboard_layout_id?.value }
         set { _dashboard_layout_id = newValue.map(AnyString.init) }
+    }
+
+    private var _group_id: AnyString?
+    /**
+     * ID of the group to place this element under in the layout
+     */
+    public var group_id: String? {
+        get { _group_id?.value }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
     private var _edit_uri: AnyString?
@@ -9768,12 +9170,22 @@ public struct DashboardElement: SDKModel {
 
     public var certification_metadata: Certification?
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, filter_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: Certification? = nil) {
+    private var _image_id: AnyString?
+    /**
+     * ID of Dashboard Image
+     */
+    public var image_id: String? {
+        get { _image_id?.value }
+        set { _image_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, group_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, filter_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: Certification? = nil, image_id: String? = nil) {
         self.can = can
         self._body_text = body_text.map(AnyString.init)
         self._body_text_as_html = body_text_as_html.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
+        self._group_id = group_id.map(AnyString.init)
         self._edit_uri = edit_uri.map(AnyString.init)
         self._id = id.map(AnyString.init)
         self.look = look
@@ -9803,6 +9215,7 @@ public struct DashboardElement: SDKModel {
         self._extension_id = extension_id.map(AnyString.init)
         self._aria_description = aria_description.map(AnyString.init)
         self.certification_metadata = certification_metadata
+        self._image_id = image_id.map(AnyString.init)
     }
 
 }
@@ -10138,6 +9551,7 @@ public struct DashboardLayoutComponent: SDKModel {
         case _granular_column = "granular_column"
         case _granular_width = "granular_width"
         case _granular_height = "granular_height"
+        case _group_id = "group_id"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -10271,7 +9685,16 @@ public struct DashboardLayoutComponent: SDKModel {
         set { _granular_height = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, element_title: String? = nil, element_title_hidden: Bool? = nil, vis_type: String? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil) {
+    private var _group_id: AnyString?
+    /**
+     * Id of parent Dashboard Layout Component group
+     */
+    public var group_id: String? {
+        get { _group_id?.value }
+        set { _group_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, element_title: String? = nil, element_title_hidden: Bool? = nil, vis_type: String? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil, group_id: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
@@ -10288,6 +9711,7 @@ public struct DashboardLayoutComponent: SDKModel {
         self._granular_column = granular_column.map(AnyInt.init)
         self._granular_width = granular_width.map(AnyInt.init)
         self._granular_height = granular_height.map(AnyInt.init)
+        self._group_id = group_id.map(AnyString.init)
     }
 
 }
@@ -14011,70 +13435,6 @@ public enum Format: String, Codable {
     case vector_tile_region = "vector_tile_region"
 }
 
-public struct GenericError: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _type = "type"
-        case _title = "title"
-        case _detail = "detail"
-        case _status = "status"
-        case _instance = "instance"
-    }
-    private var _type: AnyString?
-    /**
-     * A URI reference that identifies the problem type (read-only)
-     */
-    public var type: String? {
-        get { _type?.value }
-        set { _type = newValue.map(AnyString.init) }
-    }
-
-    private var _title: AnyString?
-    /**
-     * Overview of the error (read-only)
-     */
-    public var title: String? {
-        get { _title?.value }
-        set { _title = newValue.map(AnyString.init) }
-    }
-
-    private var _detail: AnyString?
-    /**
-     * Detail of the error (read-only)
-     */
-    public var detail: String? {
-        get { _detail?.value }
-        set { _detail = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * The HTTP status code for the problem (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _instance: AnyString?
-    /**
-     * URI reference that identifies the specific occurrence of the problem (read-only)
-     */
-    public var instance: String? {
-        get { _instance?.value }
-        set { _instance = newValue.map(AnyString.init) }
-    }
-
-    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil) {
-        self._type = type.map(AnyString.init)
-        self._title = title.map(AnyString.init)
-        self._detail = detail.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._instance = instance.map(AnyString.init)
-    }
-
-}
-
 public struct GitBranch: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -14334,216 +13694,6 @@ public struct GitConnectionTestResult: SDKModel {
 
 }
 
-public struct GitDiagnosticIssue: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case can
-        case _id = "id"
-        case _report_id = "report_id"
-        case _project_id = "project_id"
-        case _project_type = "project_type"
-        case _issue_type = "issue_type"
-        case _issue_version = "issue_version"
-        case _state = "state"
-        case created_at
-        case updated_at
-    }
-    /**
-     * Operations the current user is able to perform on this object (read-only)
-     */
-    public var can: StringDictionary<Bool>?
-
-    private var _id: AnyString?
-    /**
-     * Unique ID of the diagnostic issue. (read-only)
-     */
-    public var id: String? {
-        get { _id?.value }
-        set { _id = newValue.map(AnyString.init) }
-    }
-
-    private var _report_id: AnyString?
-    /**
-     * Parent diagnostic report ID. (read-only)
-     */
-    public var report_id: String? {
-        get { _report_id?.value }
-        set { _report_id = newValue.map(AnyString.init) }
-    }
-
-    private var _project_id: AnyString?
-    /**
-     * Target Looker Project ID. (read-only)
-     */
-    public var project_id: String? {
-        get { _project_id?.value }
-        set { _project_id = newValue.map(AnyString.init) }
-    }
-
-    private var _project_type: AnyString?
-    /**
-     * Environment scope (developer/production). (read-only)
-     */
-    public var project_type: String? {
-        get { _project_type?.value }
-        set { _project_type = newValue.map(AnyString.init) }
-    }
-
-    private var _issue_type: AnyString?
-    /**
-     * Git diagnostic issue category. (read-only)
-     */
-    public var issue_type: String? {
-        get { _issue_type?.value }
-        set { _issue_type = newValue.map(AnyString.init) }
-    }
-
-    private var _issue_version: AnyString?
-    /**
-     * Version schema. (read-only)
-     */
-    public var issue_version: String? {
-        get { _issue_version?.value }
-        set { _issue_version = newValue.map(AnyString.init) }
-    }
-
-    private var _state: AnyString?
-    /**
-     * Current execution status. (read-only)
-     */
-    public var state: String? {
-        get { _state?.value }
-        set { _state = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Creation timestamp. (read-only)
-     */
-    public var created_at: Date?
-
-    /**
-     * Last update timestamp. (read-only)
-     */
-    public var updated_at: Date?
-
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, report_id: String? = nil, project_id: String? = nil, project_type: String? = nil, issue_type: String? = nil, issue_version: String? = nil, state: String? = nil, created_at: Date? = nil, updated_at: Date? = nil) {
-        self.can = can
-        self._id = id.map(AnyString.init)
-        self._report_id = report_id.map(AnyString.init)
-        self._project_id = project_id.map(AnyString.init)
-        self._project_type = project_type.map(AnyString.init)
-        self._issue_type = issue_type.map(AnyString.init)
-        self._issue_version = issue_version.map(AnyString.init)
-        self._state = state.map(AnyString.init)
-        self.created_at = created_at
-        self.updated_at = updated_at
-    }
-
-}
-
-public struct GitDiagnosticReport: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case can
-        case _id = "id"
-        case _project_id = "project_id"
-        case _user_id = "user_id"
-        case _state = "state"
-        case _status = "status"
-        case created_at
-        case updated_at
-        case _project_type = "project_type"
-        case issues
-    }
-    /**
-     * Operations the current user is able to perform on this object (read-only)
-     */
-    public var can: StringDictionary<Bool>?
-
-    private var _id: AnyString?
-    /**
-     * Unique ID of the git diagnostic report. (read-only)
-     */
-    public var id: String? {
-        get { _id?.value }
-        set { _id = newValue.map(AnyString.init) }
-    }
-
-    private var _project_id: AnyString?
-    /**
-     * Target Looker Project ID. (read-only)
-     */
-    public var project_id: String? {
-        get { _project_id?.value }
-        set { _project_id = newValue.map(AnyString.init) }
-    }
-
-    private var _user_id: AnyString?
-    /**
-     * ID of the user initiating the diagnosis. (read-only)
-     */
-    public var user_id: String? {
-        get { _user_id?.value }
-        set { _user_id = newValue.map(AnyString.init) }
-    }
-
-    private var _state: AnyString?
-    /**
-     * Raw lifecycle state. (read-only)
-     */
-    public var state: String? {
-        get { _state?.value }
-        set { _state = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * Status derived from state. (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Creation time. (read-only)
-     */
-    public var created_at: Date?
-
-    /**
-     * Update time. (read-only)
-     */
-    public var updated_at: Date?
-
-    private var _project_type: AnyString?
-    /**
-     * Project structure type.
-     */
-    public var project_type: String? {
-        get { _project_type?.value }
-        set { _project_type = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Diagnostic issues associated with this report. (read-only)
-     */
-    public var issues: [GitDiagnosticIssue]?
-
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, project_id: String? = nil, user_id: String? = nil, state: String? = nil, status: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, project_type: String? = nil, issues: [GitDiagnosticIssue]? = nil) {
-        self.can = can
-        self._id = id.map(AnyString.init)
-        self._project_id = project_id.map(AnyString.init)
-        self._user_id = user_id.map(AnyString.init)
-        self._state = state.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self.created_at = created_at
-        self.updated_at = updated_at
-        self._project_type = project_type.map(AnyString.init)
-        self.issues = issues
-    }
-
-}
-
 public struct GitStatus: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -14609,6 +13759,8 @@ public struct GoldenQuery: SDKModel {
         case _sorts = "sorts"
         case _limit = "limit"
         case _client_id = "client_id"
+        case _pivots = "pivots"
+        case _dynamic_fields = "dynamic_fields"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -14652,7 +13804,7 @@ public struct GoldenQuery: SDKModel {
     }
 
     /**
-     * Whether this golden question should be utilized by the agent
+     * Whether this golden question should be utilized by the agent (read-only)
      */
     public var is_active: Bool?
 
@@ -14743,7 +13895,25 @@ public struct GoldenQuery: SDKModel {
         set { _client_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, query_id: Int64? = nil, questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil, created_by_user_id: Int64? = nil, last_updated_by_user_id: Int64? = nil, created_at: Date? = nil, last_updated_at: Date? = nil, explore: String? = nil, model: String? = nil, fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, sorts: [String]? = nil, limit: String? = nil, client_id: String? = nil) {
+    private var _pivots: [AnyString]?
+    /**
+     * Pivots of the associated Looker Query (read-only)
+     */
+    public var pivots: [String]? {
+        get { if let v = _pivots { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil } }
+    }
+
+    private var _dynamic_fields: AnyString?
+    /**
+     * Dynamic fields of the associated Looker Query (read-only)
+     */
+    public var dynamic_fields: String? {
+        get { _dynamic_fields?.value }
+        set { _dynamic_fields = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, query_id: Int64? = nil, questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil, created_by_user_id: Int64? = nil, last_updated_by_user_id: Int64? = nil, created_at: Date? = nil, last_updated_at: Date? = nil, explore: String? = nil, model: String? = nil, fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, sorts: [String]? = nil, limit: String? = nil, client_id: String? = nil, pivots: [String]? = nil, dynamic_fields: String? = nil) {
         self.can = can
         self._id = id.map(AnyInt.init)
         self._query_id = query_id.map(AnyInt.init)
@@ -14761,6 +13931,8 @@ public struct GoldenQuery: SDKModel {
         if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self._limit = limit.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
+        if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
+        self._dynamic_fields = dynamic_fields.map(AnyString.init)
     }
 
 }
@@ -20206,219 +19378,6 @@ public struct LookmlTestResult: SDKModel {
 
 }
 
-public struct LookMLValidatorError: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _type = "type"
-        case _title = "title"
-        case _detail = "detail"
-        case _status = "status"
-        case _instance = "instance"
-        case _model = "model"
-        case _explore = "explore"
-        case _field_name = "field_name"
-        case _message = "message"
-        case _severity = "severity"
-        case _line_number = "line_number"
-        case _lookml_url = "lookml_url"
-        case _file_path = "file_path"
-    }
-    private var _type: AnyString?
-    /**
-     * A URI reference that identifies the problem type (read-only)
-     */
-    public var type: String? {
-        get { _type?.value }
-        set { _type = newValue.map(AnyString.init) }
-    }
-
-    private var _title: AnyString?
-    /**
-     * Overview of the error (read-only)
-     */
-    public var title: String? {
-        get { _title?.value }
-        set { _title = newValue.map(AnyString.init) }
-    }
-
-    private var _detail: AnyString?
-    /**
-     * Detail of the error (read-only)
-     */
-    public var detail: String? {
-        get { _detail?.value }
-        set { _detail = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * The HTTP status code for the problem (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _instance: AnyString?
-    /**
-     * URI reference that identifies the specific occurrence of the problem (read-only)
-     */
-    public var instance: String? {
-        get { _instance?.value }
-        set { _instance = newValue.map(AnyString.init) }
-    }
-
-    private var _model: AnyString?
-    /**
-     * LookML model that contains the error (read-only)
-     */
-    public var model: String? {
-        get { _model?.value }
-        set { _model = newValue.map(AnyString.init) }
-    }
-
-    private var _explore: AnyString?
-    /**
-     * LookML Explore that contains the error (read-only)
-     */
-    public var explore: String? {
-        get { _explore?.value }
-        set { _explore = newValue.map(AnyString.init) }
-    }
-
-    private var _field_name: AnyString?
-    /**
-     * LookML field that caused the error (read-only)
-     */
-    public var field_name: String? {
-        get { _field_name?.value }
-        set { _field_name = newValue.map(AnyString.init) }
-    }
-
-    private var _message: AnyString?
-    /**
-     * Message returned by the LookML validator (read-only)
-     */
-    public var message: String? {
-        get { _message?.value }
-        set { _message = newValue.map(AnyString.init) }
-    }
-
-    private var _severity: AnyString?
-    /**
-     * Severity of the error (warning, error, fatal, info, success) (read-only)
-     */
-    public var severity: String? {
-        get { _severity?.value }
-        set { _severity = newValue.map(AnyString.init) }
-    }
-
-    private var _line_number: AnyString?
-    /**
-     * Line number of the error in the LookML file (read-only)
-     */
-    public var line_number: String? {
-        get { _line_number?.value }
-        set { _line_number = newValue.map(AnyString.init) }
-    }
-
-    private var _lookml_url: AnyString?
-    /**
-     * URL to the LookML that caused the error (read-only)
-     */
-    public var lookml_url: String? {
-        get { _lookml_url?.value }
-        set { _lookml_url = newValue.map(AnyString.init) }
-    }
-
-    private var _file_path: AnyString?
-    /**
-     * IDE folder path to the LookML file that caused the error (read-only)
-     */
-    public var file_path: String? {
-        get { _file_path?.value }
-        set { _file_path = newValue.map(AnyString.init) }
-    }
-
-    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil, model: String? = nil, explore: String? = nil, field_name: String? = nil, message: String? = nil, severity: String? = nil, line_number: String? = nil, lookml_url: String? = nil, file_path: String? = nil) {
-        self._type = type.map(AnyString.init)
-        self._title = title.map(AnyString.init)
-        self._detail = detail.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._instance = instance.map(AnyString.init)
-        self._model = model.map(AnyString.init)
-        self._explore = explore.map(AnyString.init)
-        self._field_name = field_name.map(AnyString.init)
-        self._message = message.map(AnyString.init)
-        self._severity = severity.map(AnyString.init)
-        self._line_number = line_number.map(AnyString.init)
-        self._lookml_url = lookml_url.map(AnyString.init)
-        self._file_path = file_path.map(AnyString.init)
-    }
-
-}
-
-public struct LookMLValidatorErrorItem: SDKModel {
-    public var lookml_error: LookMLValidatorError?
-
-    public var generic_error: GenericError?
-
-    public init(lookml_error: LookMLValidatorError? = nil, generic_error: GenericError? = nil) {
-        self.lookml_error = lookml_error
-        self.generic_error = generic_error
-    }
-
-}
-
-public struct LookMLValidatorResult: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _name = "name"
-        case _status = "status"
-        case _error_count = "error_count"
-        case errors
-    }
-    private var _name: AnyString?
-    /**
-     * Name of the validator (lookml) (read-only)
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _error_count: AnyInt?
-    /**
-     * Total number of failed LookML validations (read-only)
-     */
-    public var error_count: Int64? {
-        get { _error_count?.value }
-        set { _error_count = newValue.map(AnyInt.init) }
-    }
-
-    /**
-     * Details of the LookML that failed validation (read-only)
-     */
-    public var errors: [LookMLValidatorErrorItem]?
-
-    public init(name: String? = nil, status: String? = nil, error_count: Int64? = nil, errors: [LookMLValidatorErrorItem]? = nil) {
-        self._name = name.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._error_count = error_count.map(AnyInt.init)
-        self.errors = errors
-    }
-
-}
-
 public struct LookModel: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -21243,6 +20202,8 @@ public struct McpTools: SDKModel {
 
     public var get_explores: McpToolSetting?
 
+    public var get_field_value_suggestions: McpToolSetting?
+
     public var get_filters: McpToolSetting?
 
     public var get_looks: McpToolSetting?
@@ -21295,7 +20256,7 @@ public struct McpTools: SDKModel {
 
     public var create_view_from_table: McpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_field_value_suggestions: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -21311,6 +20272,7 @@ public struct McpTools: SDKModel {
         self.get_dashboards = get_dashboards
         self.get_dimensions = get_dimensions
         self.get_explores = get_explores
+        self.get_field_value_suggestions = get_field_value_suggestions
         self.get_filters = get_filters
         self.get_looks = get_looks
         self.get_measures = get_measures
@@ -23462,15 +22424,6 @@ public struct ProjectFile: SDKModel {
 
 }
 
-public struct ProjectRun: SDKModel {
-    public var run: Run?
-
-    public init(run: Run? = nil) {
-        self.run = run
-    }
-
-}
-
 public struct ProjectValidation: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -24995,151 +23948,6 @@ public struct RoleSearch: SDKModel {
 
 }
 
-public struct Run: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _run_id = "run_id"
-        case created_at
-        case started_at
-        case finished_at
-        case _status_url = "status_url"
-        case _status = "status"
-        case _git_service = "git_service"
-        case git_state
-        case result
-        case schedule
-        case _target_branch = "target_branch"
-        case _title = "title"
-        case _trigger = "trigger"
-        case change_request
-        case _suite_id = "suite_id"
-        case _username = "username"
-    }
-    private var _run_id: AnyString?
-    /**
-     * ID of the CI run (read-only)
-     */
-    public var run_id: String? {
-        get { _run_id?.value }
-        set { _run_id = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Time and date that the CI run was initiated (read-only)
-     */
-    public var created_at: Date?
-
-    /**
-     * Time and date that the CI run began executing (read-only)
-     */
-    public var started_at: Date?
-
-    /**
-     * Time and date that the CI run completed (read-only)
-     */
-    public var finished_at: Date?
-
-    private var _status_url: AnyString?
-    /**
-     * Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
-     */
-    public var status_url: String? {
-        get { _status_url?.value }
-        set { _status_url = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _git_service: AnyString?
-    /**
-     * Git service for CI run (e.g. GitHub) (read-only)
-     */
-    public var git_service: String? {
-        get { _git_service?.value }
-        set { _git_service = newValue.map(AnyString.init) }
-    }
-
-    public var git_state: CIGitState?
-
-    public var result: RunResult?
-
-    public var schedule: CIScheduleTrigger?
-
-    private var _target_branch: AnyString?
-    /**
-     * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
-     */
-    public var target_branch: String? {
-        get { _target_branch?.value }
-        set { _target_branch = newValue.map(AnyString.init) }
-    }
-
-    private var _title: AnyString?
-    /**
-     * Name of the CI suite (read-only)
-     */
-    public var title: String? {
-        get { _title?.value }
-        set { _title = newValue.map(AnyString.init) }
-    }
-
-    private var _trigger: AnyString?
-    /**
-     * Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
-     */
-    public var trigger: String? {
-        get { _trigger?.value }
-        set { _trigger = newValue.map(AnyString.init) }
-    }
-
-    public var change_request: CIChangeRequest?
-
-    private var _suite_id: AnyString?
-    /**
-     * ID of the CI suite (read-only)
-     */
-    public var suite_id: String? {
-        get { _suite_id?.value }
-        set { _suite_id = newValue.map(AnyString.init) }
-    }
-
-    private var _username: AnyString?
-    /**
-     * Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
-     */
-    public var username: String? {
-        get { _username?.value }
-        set { _username = newValue.map(AnyString.init) }
-    }
-
-    public init(run_id: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, status_url: String? = nil, status: String? = nil, git_service: String? = nil, git_state: CIGitState? = nil, result: RunResult? = nil, schedule: CIScheduleTrigger? = nil, target_branch: String? = nil, title: String? = nil, trigger: String? = nil, change_request: CIChangeRequest? = nil, suite_id: String? = nil, username: String? = nil) {
-        self._run_id = run_id.map(AnyString.init)
-        self.created_at = created_at
-        self.started_at = started_at
-        self.finished_at = finished_at
-        self._status_url = status_url.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._git_service = git_service.map(AnyString.init)
-        self.git_state = git_state
-        self.result = result
-        self.schedule = schedule
-        self._target_branch = target_branch.map(AnyString.init)
-        self._title = title.map(AnyString.init)
-        self._trigger = trigger.map(AnyString.init)
-        self.change_request = change_request
-        self._suite_id = suite_id.map(AnyString.init)
-        self._username = username.map(AnyString.init)
-    }
-
-}
-
 public struct RunningQueries: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -25351,39 +24159,6 @@ public struct RunningQueries: SDKModel {
         self.runtime = runtime
         self._sql = sql.map(AnyString.init)
         self._sql_interface_sql = sql_interface_sql.map(AnyString.init)
-    }
-
-}
-
-public struct RunResult: SDKModel {
-    public var sql_result: SqlValidatorResult?
-
-    public var sql_error: GenericError?
-
-    public var assert_result: AssertValidatorResult?
-
-    public var assert_error: GenericError?
-
-    public var content_result: ContentValidatorResult?
-
-    public var content_error: GenericError?
-
-    public var lookml_result: LookMLValidatorResult?
-
-    public var lookml_error: GenericError?
-
-    public var generic_error: GenericError?
-
-    public init(sql_result: SqlValidatorResult? = nil, sql_error: GenericError? = nil, assert_result: AssertValidatorResult? = nil, assert_error: GenericError? = nil, content_result: ContentValidatorResult? = nil, content_error: GenericError? = nil, lookml_result: LookMLValidatorResult? = nil, lookml_error: GenericError? = nil, generic_error: GenericError? = nil) {
-        self.sql_result = sql_result
-        self.sql_error = sql_error
-        self.assert_result = assert_result
-        self.assert_error = assert_error
-        self.content_result = content_result
-        self.content_error = content_error
-        self.lookml_result = lookml_result
-        self.lookml_error = lookml_error
-        self.generic_error = generic_error
     }
 
 }
@@ -28061,275 +26836,6 @@ public struct SqlQueryCreate: SDKModel {
 
 }
 
-public struct SqlValidatorError: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _type = "type"
-        case _title = "title"
-        case _detail = "detail"
-        case _status = "status"
-        case _instance = "instance"
-        case _model = "model"
-        case _explore = "explore"
-        case _message = "message"
-        case _explore_url = "explore_url"
-        case _lookml_url = "lookml_url"
-        case _dimension = "dimension"
-        case _line_number = "line_number"
-    }
-    private var _type: AnyString?
-    /**
-     * A URI reference that identifies the problem type (read-only)
-     */
-    public var type: String? {
-        get { _type?.value }
-        set { _type = newValue.map(AnyString.init) }
-    }
-
-    private var _title: AnyString?
-    /**
-     * Overview of the error (read-only)
-     */
-    public var title: String? {
-        get { _title?.value }
-        set { _title = newValue.map(AnyString.init) }
-    }
-
-    private var _detail: AnyString?
-    /**
-     * Detail of the error (read-only)
-     */
-    public var detail: String? {
-        get { _detail?.value }
-        set { _detail = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * The HTTP status code for the problem (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _instance: AnyString?
-    /**
-     * URI reference that identifies the specific occurrence of the problem (read-only)
-     */
-    public var instance: String? {
-        get { _instance?.value }
-        set { _instance = newValue.map(AnyString.init) }
-    }
-
-    private var _model: AnyString?
-    /**
-     * LookML model that contains the Explore that failed SQL validation (read-only)
-     */
-    public var model: String? {
-        get { _model?.value }
-        set { _model = newValue.map(AnyString.init) }
-    }
-
-    private var _explore: AnyString?
-    /**
-     * LookML Explore that failed SQL validation (read-only)
-     */
-    public var explore: String? {
-        get { _explore?.value }
-        set { _explore = newValue.map(AnyString.init) }
-    }
-
-    private var _message: AnyString?
-    /**
-     * Message returned by the SQL validation (read-only)
-     */
-    public var message: String? {
-        get { _message?.value }
-        set { _message = newValue.map(AnyString.init) }
-    }
-
-    private var _explore_url: AnyString?
-    /**
-     * URL to the Explore (read-only)
-     */
-    public var explore_url: String? {
-        get { _explore_url?.value }
-        set { _explore_url = newValue.map(AnyString.init) }
-    }
-
-    private var _lookml_url: AnyString?
-    /**
-     * URL to the LookML that caused the error (read-only)
-     */
-    public var lookml_url: String? {
-        get { _lookml_url?.value }
-        set { _lookml_url = newValue.map(AnyString.init) }
-    }
-
-    private var _dimension: AnyString?
-    /**
-     * LookML dimension that caused the error (read-only)
-     */
-    public var dimension: String? {
-        get { _dimension?.value }
-        set { _dimension = newValue.map(AnyString.init) }
-    }
-
-    private var _line_number: AnyString?
-    /**
-     * Line of the error in the LookML file (read-only)
-     */
-    public var line_number: String? {
-        get { _line_number?.value }
-        set { _line_number = newValue.map(AnyString.init) }
-    }
-
-    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil, model: String? = nil, explore: String? = nil, message: String? = nil, explore_url: String? = nil, lookml_url: String? = nil, dimension: String? = nil, line_number: String? = nil) {
-        self._type = type.map(AnyString.init)
-        self._title = title.map(AnyString.init)
-        self._detail = detail.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._instance = instance.map(AnyString.init)
-        self._model = model.map(AnyString.init)
-        self._explore = explore.map(AnyString.init)
-        self._message = message.map(AnyString.init)
-        self._explore_url = explore_url.map(AnyString.init)
-        self._lookml_url = lookml_url.map(AnyString.init)
-        self._dimension = dimension.map(AnyString.init)
-        self._line_number = line_number.map(AnyString.init)
-    }
-
-}
-
-public struct SqlValidatorErrorItem: SDKModel {
-    public var sql_error: SqlValidatorError?
-
-    public var generic_error: GenericError?
-
-    public init(sql_error: SqlValidatorError? = nil, generic_error: GenericError? = nil) {
-        self.sql_error = sql_error
-        self.generic_error = generic_error
-    }
-
-}
-
-public struct SqlValidatorResult: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _name = "name"
-        case incremental
-        case _status = "status"
-        case result
-    }
-    private var _name: AnyString?
-    /**
-     * Name of the validator (sql) (read-only)
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Whether the validation was incremental (read-only)
-     */
-    public var incremental: Bool?
-
-    private var _status: AnyString?
-    /**
-     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * The results of tested Explores (read-only)
-     */
-    public var result: [SqlValidatorTestedExplore]?
-
-    public init(name: String? = nil, incremental: Bool? = nil, status: String? = nil, result: [SqlValidatorTestedExplore]? = nil) {
-        self._name = name.map(AnyString.init)
-        self.incremental = incremental
-        self._status = status.map(AnyString.init)
-        self.result = result
-    }
-
-}
-
-public struct SqlValidatorTestedExplore: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _model = "model"
-        case _explore = "explore"
-        case _status = "status"
-        case _skip_reason = "skip_reason"
-        case _error_count = "error_count"
-        case errors
-    }
-    private var _model: AnyString?
-    /**
-     * LookML model that was tested (read-only)
-     */
-    public var model: String? {
-        get { _model?.value }
-        set { _model = newValue.map(AnyString.init) }
-    }
-
-    private var _explore: AnyString?
-    /**
-     * LookML Explore that was tested (read-only)
-     */
-    public var explore: String? {
-        get { _explore?.value }
-        set { _explore = newValue.map(AnyString.init) }
-    }
-
-    private var _status: AnyString?
-    /**
-     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-     */
-    public var status: String? {
-        get { _status?.value }
-        set { _status = newValue.map(AnyString.init) }
-    }
-
-    private var _skip_reason: AnyString?
-    /**
-     * Reason the validation was skipped (read-only)
-     */
-    public var skip_reason: String? {
-        get { _skip_reason?.value }
-        set { _skip_reason = newValue.map(AnyString.init) }
-    }
-
-    private var _error_count: AnyInt?
-    /**
-     * Total number of failed validations (read-only)
-     */
-    public var error_count: Int64? {
-        get { _error_count?.value }
-        set { _error_count = newValue.map(AnyInt.init) }
-    }
-
-    /**
-     * Details of the LookML that failed SQL validation (read-only)
-     */
-    public var errors: [SqlValidatorErrorItem]?
-
-    public init(model: String? = nil, explore: String? = nil, status: String? = nil, skip_reason: String? = nil, error_count: Int64? = nil, errors: [SqlValidatorErrorItem]? = nil) {
-        self._model = model.map(AnyString.init)
-        self._explore = explore.map(AnyString.init)
-        self._status = status.map(AnyString.init)
-        self._skip_reason = skip_reason.map(AnyString.init)
-        self._error_count = error_count.map(AnyInt.init)
-        self.errors = errors
-    }
-
-}
-
 public struct SshPublicKey: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -28923,6 +27429,9 @@ public struct ThemeSettings: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _background_color = "background_color"
+        case _background_image_url = "background_image_url"
+        case _background_image_id = "background_image_id"
+        case background_opacity
         case _base_font_size = "base_font_size"
         case _color_collection_id = "color_collection_id"
         case _font_color = "font_color"
@@ -28976,6 +27485,29 @@ public struct ThemeSettings: SDKModel {
         get { _background_color?.value }
         set { _background_color = newValue.map(AnyString.init) }
     }
+
+    private var _background_image_url: AnyString?
+    /**
+     * URL for background image
+     */
+    public var background_image_url: String? {
+        get { _background_image_url?.value }
+        set { _background_image_url = newValue.map(AnyString.init) }
+    }
+
+    private var _background_image_id: AnyString?
+    /**
+     * Optional. ID of theme background image.
+     */
+    public var background_image_id: String? {
+        get { _background_image_id?.value }
+        set { _background_image_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Background image opacity (0.0 to 1.0).
+     */
+    public var background_opacity: Float?
 
     private var _base_font_size: AnyString?
     /**
@@ -29289,8 +27821,11 @@ public struct ThemeSettings: SDKModel {
         set { _border_radius = newValue.map(AnyString.init) }
     }
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil, page_margin_top: String? = nil, page_margin_bottom: String? = nil, page_margin_sides: String? = nil, show_explore_header: Bool? = nil, show_explore_title: Bool? = nil, show_explore_last_run: Bool? = nil, show_explore_timezone: Bool? = nil, show_explore_run_stop_button: Bool? = nil, show_explore_actions_button: Bool? = nil, show_look_header: Bool? = nil, show_look_title: Bool? = nil, show_look_last_run: Bool? = nil, show_look_timezone: Bool? = nil, show_look_run_stop_button: Bool? = nil, show_look_actions_button: Bool? = nil, tile_title_font_size: String? = nil, column_gap_size: String? = nil, row_gap_size: String? = nil, border_radius: String? = nil) {
+    public init(background_color: String? = nil, background_image_url: String? = nil, background_image_id: String? = nil, background_opacity: Float? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil, page_margin_top: String? = nil, page_margin_bottom: String? = nil, page_margin_sides: String? = nil, show_explore_header: Bool? = nil, show_explore_title: Bool? = nil, show_explore_last_run: Bool? = nil, show_explore_timezone: Bool? = nil, show_explore_run_stop_button: Bool? = nil, show_explore_actions_button: Bool? = nil, show_look_header: Bool? = nil, show_look_title: Bool? = nil, show_look_last_run: Bool? = nil, show_look_timezone: Bool? = nil, show_look_run_stop_button: Bool? = nil, show_look_actions_button: Bool? = nil, tile_title_font_size: String? = nil, column_gap_size: String? = nil, row_gap_size: String? = nil, border_radius: String? = nil) {
         self._background_color = background_color.map(AnyString.init)
+        self._background_image_url = background_image_url.map(AnyString.init)
+        self._background_image_id = background_image_id.map(AnyString.init)
+        self.background_opacity = background_opacity
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
         self._font_color = font_color.map(AnyString.init)
@@ -32092,6 +30627,7 @@ public struct WriteDashboard: SDKModel {
         case _tile_text_color = "tile_text_color"
         case _title_color = "title_color"
         case appearance
+        case _layout_granularity = "layout_granularity"
         case preserve_desktop_layout
         case download_settings
     }
@@ -32294,6 +30830,15 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
+    private var _layout_granularity: AnyString?
+    /**
+     * The layout granularity to apply to this dashboard (ie: default or granular)
+     */
+    public var layout_granularity: String? {
+        get { _layout_granularity?.value }
+        set { _layout_granularity = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
      */
@@ -32301,7 +30846,7 @@ public struct WriteDashboard: SDKModel {
 
     public var download_settings: DashboardDownloadSettings?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, layout_granularity: String? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -32330,6 +30875,7 @@ public struct WriteDashboard: SDKModel {
         self._tile_text_color = tile_text_color.map(AnyString.init)
         self._title_color = title_color.map(AnyString.init)
         self.appearance = appearance
+        self._layout_granularity = layout_granularity.map(AnyString.init)
         self.preserve_desktop_layout = preserve_desktop_layout
         self.download_settings = download_settings
     }
@@ -32370,6 +30916,7 @@ public struct WriteDashboardElement: SDKModel {
         case _body_text = "body_text"
         case _dashboard_id = "dashboard_id"
         case _dashboard_layout_id = "dashboard_layout_id"
+        case _group_id = "group_id"
         case look
         case _look_id = "look_id"
         case _merge_result_id = "merge_result_id"
@@ -32391,6 +30938,7 @@ public struct WriteDashboardElement: SDKModel {
         case _extension_id = "extension_id"
         case _aria_description = "aria_description"
         case certification_metadata
+        case _image_id = "image_id"
     }
     private var _body_text: AnyString?
     /**
@@ -32417,6 +30965,15 @@ public struct WriteDashboardElement: SDKModel {
     public var dashboard_layout_id: String? {
         get { _dashboard_layout_id?.value }
         set { _dashboard_layout_id = newValue.map(AnyString.init) }
+    }
+
+    private var _group_id: AnyString?
+    /**
+     * ID of the group to place this element under in the layout
+     */
+    public var group_id: String? {
+        get { _group_id?.value }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -32592,10 +31149,20 @@ public struct WriteDashboardElement: SDKModel {
      */
     public var certification_metadata: WriteCertification?
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, filter_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: WriteCertification? = nil) {
+    private var _image_id: AnyString?
+    /**
+     * ID of Dashboard Image
+     */
+    public var image_id: String? {
+        get { _image_id?.value }
+        set { _image_id = newValue.map(AnyString.init) }
+    }
+
+    public init(body_text: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, group_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, filter_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: WriteCertification? = nil, image_id: String? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
+        self._group_id = group_id.map(AnyString.init)
         self.look = look
         self._look_id = look_id.map(AnyString.init)
         self._merge_result_id = merge_result_id.map(AnyString.init)
@@ -32617,6 +31184,7 @@ public struct WriteDashboardElement: SDKModel {
         self._extension_id = extension_id.map(AnyString.init)
         self._aria_description = aria_description.map(AnyString.init)
         self.certification_metadata = certification_metadata
+        self._image_id = image_id.map(AnyString.init)
     }
 
 }
@@ -32880,6 +31448,7 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         case _granular_column = "granular_column"
         case _granular_width = "granular_width"
         case _granular_height = "granular_height"
+        case _group_id = "group_id"
     }
     private var _dashboard_layout_id: AnyString?
     /**
@@ -32976,7 +31545,16 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         set { _granular_height = newValue.map(AnyInt.init) }
     }
 
-    public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil) {
+    private var _group_id: AnyString?
+    /**
+     * Id of parent Dashboard Layout Component group
+     */
+    public var group_id: String? {
+        get { _group_id?.value }
+        set { _group_id = newValue.map(AnyString.init) }
+    }
+
+    public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil, group_id: String? = nil) {
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._row = row.map(AnyInt.init)
@@ -32988,6 +31566,7 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         self._granular_column = granular_column.map(AnyInt.init)
         self._granular_width = granular_width.map(AnyInt.init)
         self._granular_height = granular_height.map(AnyInt.init)
+        self._group_id = group_id.map(AnyString.init)
     }
 
 }
@@ -34078,39 +32657,14 @@ public struct WriteGitBranch: SDKModel {
 }
 
 /**
- * Dynamic writeable type for GitDiagnosticReport removes:
- * can, id, project_id, user_id, state, status, created_at, updated_at, issues
- */
-public struct WriteGitDiagnosticReport: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _project_type = "project_type"
-    }
-    private var _project_type: AnyString?
-    /**
-     * Project structure type.
-     */
-    public var project_type: String? {
-        get { _project_type?.value }
-        set { _project_type = newValue.map(AnyString.init) }
-    }
-
-    public init(project_type: String? = nil) {
-        self._project_type = project_type.map(AnyString.init)
-    }
-
-}
-
-/**
  * Dynamic writeable type for GoldenQuery removes:
- * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id
+ * can, id, query_id, is_active, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id, pivots, dynamic_fields
  */
 public struct WriteGoldenQuery: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _questions = "questions"
         case _answer = "answer"
-        case is_active
     }
     private var _questions: [AnyString]?
     /**
@@ -34130,15 +32684,9 @@ public struct WriteGoldenQuery: SDKModel {
         set { _answer = newValue.map(AnyString.init) }
     }
 
-    /**
-     * Whether this golden question should be utilized by the agent
-     */
-    public var is_active: Bool?
-
-    public init(questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil) {
+    public init(questions: [String]? = nil, answer: String? = nil) {
         if let v = questions { _questions = v.map { AnyString.init($0) } } else { _questions = nil }
         self._answer = answer.map(AnyString.init)
-        self.is_active = is_active
     }
 
 }
@@ -34944,6 +33492,12 @@ public struct WriteMcpTools: SDKModel {
      * Dynamic writeable type for McpToolSetting removes:
      * description, category, access_level
      */
+    public var get_field_value_suggestions: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
     public var get_filters: WriteMcpToolSetting?
 
     /**
@@ -35096,7 +33650,7 @@ public struct WriteMcpTools: SDKModel {
      */
     public var create_view_from_table: WriteMcpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_field_value_suggestions: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -35112,6 +33666,7 @@ public struct WriteMcpTools: SDKModel {
         self.get_dashboards = get_dashboards
         self.get_dimensions = get_dimensions
         self.get_explores = get_explores
+        self.get_field_value_suggestions = get_field_value_suggestions
         self.get_filters = get_filters
         self.get_looks = get_looks
         self.get_measures = get_measures
